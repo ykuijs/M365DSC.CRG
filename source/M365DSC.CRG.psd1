@@ -51,7 +51,10 @@ PowerShellVersion = '5.0'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @('DscBuildHelpers', @{ModuleName='DscBuildHelpers'; ModuleVersion='0.2.1'; GUID='23ccd4bf-0a52-4077-986f-c153893e5a6a'})
+RequiredModules = @(
+    'xDscResourceDesigner', @{ ModuleName = 'xDscResourceDesigner'; ModuleVersion = '1.9.0.0'}
+    'DscBuildHelpers', @{ModuleName='DscBuildHelpers'; ModuleVersion='0.2.1'; GUID='23ccd4bf-0a52-4077-986f-c153893e5a6a'}
+)
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
