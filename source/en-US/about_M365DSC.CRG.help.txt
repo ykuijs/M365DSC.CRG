@@ -5,10 +5,11 @@ SHORT DESCRIPTION
     Microsoft365Dsc Composite Resource Generator
 
 LONG DESCRIPTION
-    Microsoft365Dsc Composite Resource Generator
+    This module will be able to generate Composite Resources for Microsoft365DSC, which can be used on Microsoft365DSC deployments.
+    These Composite Resources are used in the Microsoft365DSC whitepaper "Managing Microsoft 365 in true DevOps style with Microsoft365DSC and Azure DevOps" (https://aka.ms/m365dscwhitepaper).
 
 EXAMPLES
-    PS C:\> {{ add examples here }}
+    PS C:\> New-CompositeResourceModule -OutputPath C:\Temp
 
 NOTE:
     Thank you to all those who contributed to this module, by writing code, sharing opinions, and provided feedback.
@@ -17,8 +18,7 @@ TROUBLESHOOTING NOTE:
     Look out on the Github repository for issues and new releases.
 
 SEE ALSO
-    - {{ Please add Project URI such as github }}}
+    - https://github.com/ykuijs/M365DSC.CRG
 
 KEYWORDS
-    {{ Add comma separated keywords here }}
-
+    Microsoft 365, Microsoft365Dsc, DSC, Composite Resource
