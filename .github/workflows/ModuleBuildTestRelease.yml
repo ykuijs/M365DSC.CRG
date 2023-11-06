@@ -22,7 +22,7 @@ env:
 jobs:
   Build_Stage_Package_Module:
     name: Package Module
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,9 +34,9 @@ jobs:
           dotnet-gitversion
           $gitVersionObject = dotnet-gitversion | ConvertFrom-Json
           Write-Output "NuGetVersionV2=$($gitVersionObject.NuGetVersionV2)" >> $env:GITHUB_OUTPUT
-        shell: powershell
+        shell: pwsh
       - name: Build & Package Module
-        shell: powershell
+        shell: pwsh
         run: './build.ps1 -ResolveDependency -Tasks Pack'
         env:
           ModuleVersion: ${{ steps.GitVersion.outputs.NuGetVersionV2 }}
