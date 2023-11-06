@@ -13,10 +13,66 @@ Describe New-CompositeResourceModule {
     BeforeAll {
         Mock -CommandName Write-Host -MockWith {} -ModuleName $dscModuleName
 
-        # Mock -CommandName Get-PrivateFunction -MockWith {
-        #     # This return the value passed to the Get-PrivateFunction parameter $PrivateData.
-        #     $PrivateData
-        # } -ModuleName $dscModuleName
+        function Test-IsPsCustomObject
+        {
+            [CmdletBinding()]
+            param (
+                [Parameter()]
+                [System.Object]
+                $v
+            )
+            $v.PSTypeNames -contains 'System.Management.Automation.PSCustomObject'
+        }
+
+        function Test-Equality
+        {
+            [CmdletBinding()]
+            param
+            (
+                [Parameter()]
+                [System.Object]
+                $a,
+
+                [Parameter()]
+                [System.Object]
+                $b
+            )
+
+            # recursive step for arrays
+            if ($a -is [array] -and $b -is [array])
+            {
+                if ($a.Count -ne $b.Count)
+                {
+                    return $false
+                }
+                $inequalIndexes = 0..($a.Count - 1) | Where-Object { -not (Test-Equality $a[$_] $b[$_]) }
+                Write-Verbose -Message "inequalKeys: $inequalKeys"
+                return $inequalIndexes.Count -eq 0
+            }
+            # recursive step for hashtables
+            if ($a -is [hashtable] -and $b -is [hashtable])
+            {
+                $inequalKeys = $a.Keys + $b.Keys `
+                | Sort-Object -Unique `
+                | Where-Object { -not (Test-Equality $a[$_] $b[$_]) }
+                Write-Verbose -Message "inequalKeys: $inequalKeys"
+                return $inequalKeys.Count -eq 0
+            }
+            # recursive step for objects
+            # use a helper function to circumvent this PowerShell bug:
+            # https://github.com/PowerShell/PowerShell/issues/9557
+            if ((Test-IsPsCustomObject -v $a) -and (Test-IsPsCustomObject -v $b))
+            {
+                $inequalKeys = $a.psobject.Properties + $b.psobject.Properties `
+                | ForEach-Object Name `
+                | Sort-Object -Unique `
+                | Where-Object { -not (Test-Equality $a.$_ $b.$_) }
+                Write-Verbose -Message "inequalKeys: $inequalKeys"
+                return $inequalKeys.Count -eq 0
+            }
+            # base case
+            return ($null -ne $a -or $null -ne $null) -and $a.GetType() -eq $b.GetType() -and $a -eq $b
+        }
     }
 
     Context 'Function fails because of issues' {
@@ -120,9 +176,8 @@ Describe New-CompositeResourceModule {
             } -ModuleName $dscModuleName
             Mock -CommandName Save-Resource -MockWith {} -ModuleName $dscModuleName
             Mock -CommandName Set-Content -MockWith {
-                $start = $value[0].IndexOf('@{')
-                $end = $value[0].Length - $start
-                $global:psdContent = $value[0].Substring($start,$end)
+                $sb = [Scriptblock]::Create($value)
+                $global:psdContent = $sb.InvokeReturnAsIs()
             } -ModuleName $dscModuleName
         }
 
@@ -131,8 +186,10 @@ Describe New-CompositeResourceModule {
             Should -Invoke -CommandName Save-Resource -Times 10 -ModuleName $dscModuleName
             Should -Invoke -CommandName Set-Content -Times 1 -ModuleName $dscModuleName
 
-            $psdTargetContent = Get-Content -Path $PSScriptRoot\PsdTemplate.psd1 -Raw
-            $psdContent.Trim() | Should -Be $psdTargetContent.Trim()
+            $content = Get-Content -Path "$PSScriptRoot\PsdTemplate.psd1" -Raw
+            $sb = [Scriptblock]::Create($content)
+            $psdTargetContent = $sb.InvokeReturnAsIs()
+            Test-Equality -a $psdContent -b $psdTargetContent | Should -Be $true
         }
     }
 }
