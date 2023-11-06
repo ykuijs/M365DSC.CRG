@@ -7,4 +7,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added first version
+- Added Composite Resource generator code
+- Added Sampler task, to use the CRG in a pipeline

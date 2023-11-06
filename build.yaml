@@ -6,10 +6,12 @@
 # SourcePath: ./Sampler/Sampler.psd1
 # Output Directory where ModuleBuilder will build the Module, relative to module manifest
 # OutputDirectory: ../output/Sampler
-BuiltModuleSubdirectory: module
+#BuiltModuleSubdirectory: module
 CopyPaths:
   - en-US
   - Dependencies.psd1
+  - ../.build/tasks
+suffix: suffix.ps1
 Encoding: UTF8
 # Can be used to manually specify module's semantic version if the preferred method of
 # using GitVersion is not available, and it is not possible to set the session environment
@@ -74,6 +76,7 @@ BuildWorkflow:
   publish:
     - publish_module_to_gallery
     - Publish_Release_To_GitHub
+    - Create_ChangeLog_GitHub_PR
 
 ####################################################
 #       PESTER  Configuration                      #
@@ -83,6 +86,7 @@ Pester:
   OutputFormat: NUnitXML
   # Excludes one or more paths from being used to calculate code coverage.
   ExcludeFromCodeCoverage:
+    - tasks
 
   # If no scripts are defined the default is to use all the tests under the project's
   # tests folder or source folder (if present). Test script paths can be defined to
@@ -115,14 +119,6 @@ Pester:
   #CodeCoverageFilePattern: JaCoCo_Merge.xml # the pattern used to search all pipeline test job artifacts
   #CodeCoverageMergedOutputFile: JaCoCo_coverage.xml # the file that is created for the merged code coverage
 
-DscTest:
-  ExcludeTag:
-    - "Common Tests - New Error-Level Script Analyzer Rules"
-  Tag:
-  ExcludeSourceFile:
-    - output
-  #  - Templates
-
 # Import ModuleBuilder tasks from a specific PowerShell module using the build
 # task's alias. Wildcard * can be used to specify all tasks that has a similar
 # prefix and or suffix. The module contain the task must be added as a required
@@ -132,7 +128,6 @@ ModuleBuildTasks:
     - '*.build.Sampler.ib.tasks'
   Sampler.GitHubTasks:
     - '*.ib.tasks'
-
 
 # Invoke-Build Header to be used to 'decorate' the terminal output of the tasks.
 TaskHeader: |
@@ -145,3 +140,12 @@ TaskHeader: |
   Write-Build DarkGray "  $Path"
   Write-Build DarkGray "  $($Task.InvocationInfo.ScriptName):$($Task.InvocationInfo.ScriptLineNumber)"
   ""
+
+GitHubConfig:
+  ReleaseAssets:
+    - 'output/CHANGELOG.md'
+  GitHubFilesToAdd:
+    - 'CHANGELOG.md'
+  GitHubConfigUserName: ykuijs
+  GitHubConfigUserEmail: ykuijs@hotmail.com
+  UpdateChangelogOnPrerelease: false

@@ -46,7 +46,7 @@ function Save-Resource
 
     process
     {
-        $modulePath = Join-Path -Path $OutputPath -ChildPath "M365Config\$Version"
+        $modulePath = Join-Path -Path $OutputPath -ChildPath "M365DSC.CompositeResources\$Version"
         $dscResourcesPath = Join-Path -Path $modulePath -ChildPath 'DscResources'
 
         # Save the schema file of the composite resource

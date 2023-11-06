@@ -5,7 +5,7 @@ function Initialize-Module
         Initializes the module by creating all required files and folders
 
         .Description
-        This function initializes the M365Config module by creating the
+        This function initializes the M365DSC.CompositeResources module by creating the
         required folder structure and the module manifest file.
 
         .Parameter Version
@@ -33,7 +33,7 @@ function Initialize-Module
     process
     {
         # Create the folder structure
-        $modulePath = Join-Path -Path $OutputPath -ChildPath "M365Config\$Version"
+        $modulePath = Join-Path -Path $OutputPath -ChildPath "M365DSC.CompositeResources\$Version"
         if ((Test-Path -Path $modulePath) -eq $false)
         {
             $null = New-Item -Path $modulePath -ItemType Directory
@@ -74,7 +74,7 @@ function Initialize-Module
         [void]$moduleManifestString.AppendLine('    }')
         [void]$moduleManifestString.AppendLine('}')
 
-        $moduleManifestFileName = 'M365Config.psd1'
+        $moduleManifestFileName = 'M365DSC.CompositeResources.psd1'
         $moduleManifestFilePath = Join-Path -Path $modulePath -ChildPath $moduleManifestFileName
 
         # Save the module manifest content to file
