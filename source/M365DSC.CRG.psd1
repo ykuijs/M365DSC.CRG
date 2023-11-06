@@ -97,7 +97,7 @@ PrivateData = @{
         Prerelease =  ''
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags         = 'DesiredStateConfiguration', 'DSC', 'M365DSC', 'Microsoft365DSC', 'Microsoft365'
+        Tags         = 'DesiredStateConfiguration', 'DSC', 'M365DSC', 'Microsoft365DSC', 'Microsoft365', 'Composite Resource'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/ykuijs/M365DSC.CRG/blob/main/LICENSE'
