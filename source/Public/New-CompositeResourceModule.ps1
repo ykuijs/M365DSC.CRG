@@ -488,7 +488,7 @@ function New-CompositeResourceModule
             Write-Host -Object 'Writing ConfigurationData file' -ForegroundColor Cyan
             $psdStringData = "# ($(Get-Date -f 'yyyy-MM-dd HH:mm:ss')) Generated using Microsoft365DSC v$($m365Module.Version)`n"
             $psdStringData += $configData | ConvertTo-Psd
-            $psdPath = Join-Path -Path $OutputPath -ChildPath 'M365ConfigurationDataExample.psd1'
+            $psdPath = Join-Path -Path $OutputPath -ChildPath "M365DSC.CompositeResources\$($m365Module.Version)\M365ConfigurationDataExample.psd1"
             Set-Content -Path $psdPath -Value $psdStringData
             return $true
         }

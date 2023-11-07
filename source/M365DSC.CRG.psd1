@@ -24,7 +24,7 @@ GUID = '29313631-3fdf-45b7-a8b7-00e34b280983'
 Author = 'Yorick Kuijs'
 
 # Company or vendor of this module
-CompanyName = 'Yorick Kuijs'
+CompanyName = 'Microsoft'
 
 # Copyright statement for this module
 Copyright = '(c) 2023 Yorick Kuijs. All rights reserved.'
