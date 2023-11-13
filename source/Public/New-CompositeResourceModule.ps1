@@ -12,6 +12,9 @@ function New-CompositeResourceModule
 
         .Parameter OutputPath
         Specifies the path in which the new module should be generated.
+
+        .Parameter Version
+        Specifies the version of Microsoft365DSC for which the new module should be generated.
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification="Using Write-Host to format output")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "", Justification="Not changing state")]
@@ -20,7 +23,11 @@ function New-CompositeResourceModule
     param (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $OutputPath
+        $OutputPath,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Version
     )
 
     process
@@ -113,7 +120,7 @@ function New-CompositeResourceModule
         #region Main script
         # Get the Microsoft365DSC module
         [Array]$m365Module = Get-Module Microsoft365DSC -ListAvailable | Where-Object -FilterScript {
-            $_.Version -eq $ModuleVersion
+            $_.Version -eq $Version
         }
 
         # Check if the module has been retrieved or not
