@@ -13,6 +13,8 @@ Describe New-CompositeResourceModule {
     BeforeAll {
         Mock -CommandName Write-Host -MockWith {} -ModuleName $dscModuleName
 
+        $testVersion = '1.23.1108.1'
+
         function Test-IsPsCustomObject
         {
             [CmdletBinding()]
@@ -79,14 +81,14 @@ Describe New-CompositeResourceModule {
         It 'Should return False because the Dependencies file does not exist' {
             Mock -CommandName Test-Path -MockWith { return $false } -ModuleName $dscModuleName
 
-            New-CompositeResourceModule -OutputPath 'C:\Temp' -Version $env:ModuleVersion | Should -Be $false
+            New-CompositeResourceModule -OutputPath 'C:\Temp' -Version $testVersion | Should -Be $false
         }
 
         It 'Should return False because Microsoft365DSC cannot be found' {
             Mock -CommandName Test-Path -MockWith { return $true } -ModuleName $dscModuleName
             Mock -CommandName Get-Module -MockWith { } -ModuleName $dscModuleName
 
-            New-CompositeResourceModule -OutputPath 'C:\Temp' -Version $env:ModuleVersion | Should -Be $false
+            New-CompositeResourceModule -OutputPath 'C:\Temp' -Version $testVersion | Should -Be $false
         }
 
     }
@@ -94,20 +96,20 @@ Describe New-CompositeResourceModule {
     Context 'Function succeeds, module is created correctly' {
         BeforeAll {
             Mock -CommandName Test-Path -MockWith { return $true } -ModuleName $dscModuleName
-            Mock -CommandName Get-Module -MockWith { return @(@{Name = 'Microsoft365DSC';Version = $env:ModuleVersion;Path = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$env:ModuleVersion"}) } -ModuleName $dscModuleName
+            Mock -CommandName Get-Module -MockWith { return @(@{Name = 'Microsoft365DSC';Version = $testVersion;Path = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion"}) } -ModuleName $dscModuleName
             Mock -CommandName Initialize-Module -MockWith {} -ModuleName $dscModuleName
             Mock -CommandName Get-ChildItem -MockWith {
                 return @(
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$env:ModuleVersion\DSCResources\MSFT_AADApplication\MSFT_AADApplication.schema.mof";Name = 'MSFT_AADApplication.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$env:ModuleVersion\DSCResources\MSFT_EXOAcceptedDomain\MSFT_EXOAcceptedDomain.schema.mof";Name = 'MSFT_EXOAcceptedDomain.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$env:ModuleVersion\DSCResources\MSFT_IntuneAntivirusPolicyWindows10SettingCatalog\MSFT_IntuneAntivirusPolicyWindows10SettingCatalog.schema.mof";Name = 'MSFT_IntuneAntivirusPolicyWindows10SettingCatalog.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$env:ModuleVersion\DSCResources\MSFT_O365AdminAuditLogConfig\MSFT_O365AdminAuditLogConfig.schema.mof";Name = 'MSFT_O365AdminAuditLogConfig.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$env:ModuleVersion\DSCResources\MSFT_ODSettings\MSFT_ODSettings.schema.mof";Name = 'MSFT_ODSettings.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$env:ModuleVersion\DSCResources\MSFT_PlannerPlan\MSFT_PlannerPlan.schema.mof";Name = 'MSFT_PlannerPlan.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$env:ModuleVersion\DSCResources\MSFT_PPTenantSettings\MSFT_PPTenantSettings.schema.mof";Name = 'MSFT_PPTenantSettings.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$env:ModuleVersion\DSCResources\MSFT_SCAuditConfigurationPolicy\MSFT_SCAuditConfigurationPolicy.schema.mof";Name = 'MSFT_SCAuditConfigurationPolicy.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$env:ModuleVersion\DSCResources\MSFT_SPOTenantSettings\MSFT_SPOTenantSettings.schema.mof";Name = 'MSFT_SPOTenantSettings.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$env:ModuleVersion\DSCResources\MSFT_TeamsClientConfiguration\MSFT_TeamsClientConfiguration.schema.mof";Name = 'MSFT_TeamsClientConfiguration.schema.mof' }
+                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_AADApplication\MSFT_AADApplication.schema.mof";Name = 'MSFT_AADApplication.schema.mof' }
+                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_EXOAcceptedDomain\MSFT_EXOAcceptedDomain.schema.mof";Name = 'MSFT_EXOAcceptedDomain.schema.mof' }
+                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_IntuneAntivirusPolicyWindows10SettingCatalog\MSFT_IntuneAntivirusPolicyWindows10SettingCatalog.schema.mof";Name = 'MSFT_IntuneAntivirusPolicyWindows10SettingCatalog.schema.mof' }
+                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_O365AdminAuditLogConfig\MSFT_O365AdminAuditLogConfig.schema.mof";Name = 'MSFT_O365AdminAuditLogConfig.schema.mof' }
+                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_ODSettings\MSFT_ODSettings.schema.mof";Name = 'MSFT_ODSettings.schema.mof' }
+                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_PlannerPlan\MSFT_PlannerPlan.schema.mof";Name = 'MSFT_PlannerPlan.schema.mof' }
+                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_PPTenantSettings\MSFT_PPTenantSettings.schema.mof";Name = 'MSFT_PPTenantSettings.schema.mof' }
+                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_SCAuditConfigurationPolicy\MSFT_SCAuditConfigurationPolicy.schema.mof";Name = 'MSFT_SCAuditConfigurationPolicy.schema.mof' }
+                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_SPOTenantSettings\MSFT_SPOTenantSettings.schema.mof";Name = 'MSFT_SPOTenantSettings.schema.mof' }
+                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_TeamsClientConfiguration\MSFT_TeamsClientConfiguration.schema.mof";Name = 'MSFT_TeamsClientConfiguration.schema.mof' }
                 ) } -ModuleName $dscModuleName
             Mock -CommandName Get-MofSchemaObject -MockWith {
                 $allMofSchemas = . $PSScriptRoot\MofSchemas.ps1
@@ -176,7 +178,7 @@ Describe New-CompositeResourceModule {
         }
 
         It 'Should return True because the CR module is created successfully' {
-            New-CompositeResourceModule -OutputPath 'C:\Temp' -Version $env:ModuleVersion | Should -Be $true
+            New-CompositeResourceModule -OutputPath 'C:\Temp' -Version $testVersion | Should -Be $true
             Should -Invoke -CommandName Save-Resource -Times 10 -ModuleName $dscModuleName
             Should -Invoke -CommandName Set-Content -Times 1 -ModuleName $dscModuleName
 

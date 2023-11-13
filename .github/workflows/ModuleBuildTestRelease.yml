@@ -45,8 +45,6 @@ jobs:
         with:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}/
-    outputs:
-      ModuleVersion: ${{ steps.GitVersion.outputs.ModuleVersion }}
 
   Test_Stage_test_windows_ps:
     name: Windows (Windows PowerShell)
@@ -65,8 +63,6 @@ jobs:
       - name: Run Tests
         shell: powershell
         run: './build.ps1 -Tasks Test'
-        env:
-          ModuleVersion: ${{ needs.Build_Stage_Package_Module.outputs.ModuleVersion }}
       - name: Publish Test Artifact
         uses: actions/upload-artifact@v3
         with:
