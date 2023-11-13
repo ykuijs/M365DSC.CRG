@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added documentation to the Readme
+- Extended the module manifest with the additional information
+- Moved the example data file inside the module folder, so it will be ioported with the module
+
 ## [0.1.2] - 2023-11-07
 
 ### Added
