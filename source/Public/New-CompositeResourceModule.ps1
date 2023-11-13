@@ -497,17 +497,10 @@ function New-CompositeResourceModule
             Set-Content -Path $psdPath -Value $psdStringData
             return $true
         }
-        elseif ($m365Module.Count -eq 0)
-        {
-            # Can't generate the module, since the Microsoft365DSC module cannot be found.
-            Write-Host -Object 'Microsoft365DSC not found!' -ForegroundColor Red
-            return $false
-        }
         else
         {
             # Can't generate the module, since the Microsoft365DSC module cannot be found.
-            $versions = ($m365Module.Version | Sort-Object -Property Major, Minor, Build) -join ', '
-            Write-Host -Object "Multiple versions of Microsoft365DSC found: $versions" -ForegroundColor Red
+            Write-Host -Object 'Microsoft365DSC not found!' -ForegroundColor Red
             return $false
         }
         #endregion
