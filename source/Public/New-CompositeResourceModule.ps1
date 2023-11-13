@@ -112,13 +112,18 @@ function New-CompositeResourceModule
 
         #region Main script
         # Get the Microsoft365DSC module
-        [Array]$m365Module = Get-Module Microsoft365DSC -ListAvailable
+        [Array]$m365Module = Get-Module Microsoft365DSC -ListAvailable | Where-Object -FilterScript {
+            $_.Version -eq $ModuleVersion
+        }
 
         # Check if the module has been retrieved or not
-        if ($m365Module.Count -eq 1)
+        if ($m365Module.Count -gt 0)
         {
-            # Get the version of Microsoft365DSC
-            $version = $m365Module.Version.ToString()
+            if ($m365Module.Count -gt 1)
+            {
+                Write-Host -Object 'Found multiple versions of Microsoft365DSC. Using the latest version.'
+                $m365Module = $m365Module | Select-Object -First 1
+            }
 
             # Initialize the module
             Initialize-Module -Version $version -OutputPath $OutputPath

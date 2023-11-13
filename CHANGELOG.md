@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Removed installation of M365DSC, has to be taken care of outside of this module
+
 ## [0.1.3] - 2023-11-13
 
 ### Added

@@ -63,7 +63,7 @@ task Generate_Composite_Resource_Module {
 
     Write-Build White 'Generating Composite Resource Module'
 
-    Install-Module -Name Microsoft365DSC -RequiredVersion $env:ModuleVersion -Scope AllUsers
+    #Install-Module -Name Microsoft365DSC -RequiredVersion $env:ModuleVersion -Scope AllUsers -Confirm:$false -Force
 
     $result = New-CompositeResourceModule -OutputPath $OutputDirectory
 
