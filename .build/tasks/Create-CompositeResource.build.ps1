@@ -68,7 +68,7 @@ task Generate_Composite_Resource_Module {
         Install-Module -Name 'Microsoft365DSC' -RequiredVersion $env:ModuleVersion -Scope AllUsers -Confirm:$false -Force
     }
 
-    $result = New-CompositeResourceModule -OutputPath $OutputDirectory
+    $result = New-CompositeResourceModule -OutputPath $OutputDirectory -Version $env:ModuleVersion
 
     if ($result)
     {
