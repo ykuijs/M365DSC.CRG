@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.9] - 2023-11-27
+
 ### Fixed
 
 - Fixed type in module manifest generation that resulted in an invalid manifest
