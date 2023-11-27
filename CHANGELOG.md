@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.7] - 2023-11-27
+
 ### Fixed
 
 - Fixed bug in module generation that was caused by new versioning convention of the Composite Resources module
