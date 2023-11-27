@@ -63,11 +63,6 @@ task Generate_Composite_Resource_Module {
 
     Write-Build White 'Generating Composite Resource Module'
 
-    if ($null -eq ((Get-Module 'Microsoft365DSC' -ListAvailable) | Where-Object { $_.Version -eq $env:ModuleVersion }))
-    {
-        Install-Module -Name 'Microsoft365DSC' -RequiredVersion $env:ModuleVersion -Scope AllUsers -Confirm:$false -Force
-    }
-
     $result = New-CompositeResourceModule -OutputPath $OutputDirectory -Version $env:ModuleVersion
 
     if ($result)

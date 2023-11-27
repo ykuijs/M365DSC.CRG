@@ -96,6 +96,10 @@ function Get-EmbeddedPropertyString
                 else
                 {
                     Write-Warning -Message "Specified embedded instance '$($Property.EmbeddedInstance)' for property '$($Property.Name)' cannot be found!"
+                    $script:errors += [PSCustomObject]@{
+                        Type = 'Warning'
+                        Message = "Specified embedded instance '$($Property.EmbeddedInstance)' for property '$($Property.Name)' cannot be found for resource '$shortResourceName'!"
+                    }
                 }
             }
         }

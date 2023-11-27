@@ -47,6 +47,8 @@ function New-CompositeResourceModule
             return $false
         }
 
+        $script:errors = @()
+
         $configData = [Ordered]@{
             AllNodes    = @(
                 @{
@@ -228,6 +230,10 @@ function New-CompositeResourceModule
                     Default
                     {
                         Write-Error 'Unknown workload for this resource!'
+                        $script:errors += [PSCustomObject]@{
+                            Type = 'Error'
+                            Message = "Unknown workload for resource '$shortResourceName'"
+                        }
                         continue
                     }
                 }
@@ -284,6 +290,10 @@ function New-CompositeResourceModule
                 if (($resourceSchema.Attributes | Where-Object -FilterScript { $_.Name -eq 'CertificateThumbprint' }) -isnot [System.Collections.Hashtable])
                 {
                     Write-Host '    Resource does not support CertificateThumbprint authentication. Skipping resource for now!' -ForegroundColor Red
+                    $script:errors += [PSCustomObject]@{
+                        Type = 'Warning'
+                        Message = "Resource '$shortResourceName' does not support CertificateThumbprint authentication. Resource has been skipped!"
+                    }
                     continue
                 }
 
@@ -502,6 +512,13 @@ function New-CompositeResourceModule
             $psdStringData += $configData | ConvertTo-Psd
             $psdPath = Join-Path -Path $OutputPath -ChildPath "M365DSC.CompositeResources\$($m365Module.Version)\M365ConfigurationDataExample.psd1"
             Set-Content -Path $psdPath -Value $psdStringData
+
+            Write-Host -Object 'Encountered issues:' -ForegroundColor Cyan
+            foreach ($err in $script:errors)
+            {
+                Write-Host -Object ("{0,-10} | {1}"-f $err.Type,$err.Message)
+            }
+
             return $true
         }
         else

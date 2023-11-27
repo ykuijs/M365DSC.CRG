@@ -15,7 +15,7 @@ function Initialize-Module
         Path to which files of the new module are written.
 
         .Example
-        Initialize-Module -Version 1.23.621.1
+        Initialize-Module -Version 1.23.621.100
     #>
     [CmdletBinding()]
     [OutputType()]
@@ -45,6 +45,8 @@ function Initialize-Module
             $null = New-Item -Path $dscResourcesPath -ItemType Directory
         }
 
+        $m365dscVersion = $Version.Substring(0, $Version.LastIndexOf('.') + 2)
+
         # Create the module manifest content
         $moduleManifestString = [System.Text.StringBuilder]::new()
         [void]$moduleManifestString.AppendLine('#')
@@ -70,7 +72,10 @@ function Initialize-Module
         [void]$moduleManifestString.AppendLine("    CompanyName          = 'Microsoft'")
         [void]$moduleManifestString.AppendLine('')
         [void]$moduleManifestString.AppendLine('    # Modules that must be imported into the global environment prior to importing this module')
-        [void]$moduleManifestString.AppendLine("    RequiredModules      = @('DscBuildHelpers', @{ModuleName='DscBuildHelpers'; RequiredVersion='0.2.1'; GUID='23ccd4bf-0a52-4077-986f-c153893e5a6a'})")
+        [void]$moduleManifestString.AppendLine('    RequiredModules      = @(')
+        [void]$moduleManifestString.AppendLine("        @{ModuleName='DscBuildHelpers'; ModuleVersion ='0.2.1'; GUID='23ccd4bf-0a52-4077-986f-c153893e5a6a'}")
+        [void]$moduleManifestString.AppendLine("        @{ModuleName='Microsoft365DSC'; RequiredVersion='$m365dscVersion'; GUID='39f599a6-d212-4480-83b3-a8ea2124d8cf'})")
+        [void]$moduleManifestString.AppendLine('    )')
         [void]$moduleManifestString.AppendLine('')
         [void]$moduleManifestString.AppendLine('    # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.')
         [void]$moduleManifestString.AppendLine("    FunctionsToExport    = @('New-M365DSCExampleDataFile')")
@@ -111,7 +116,7 @@ function Initialize-Module
         [void]$moduleManifestString.AppendLine("            IconUri      = 'https://github.com/microsoft/Microsoft365DSC/blob/Dev/Modules/Microsoft365DSC/Dependencies/Images/Logo.png?raw=true'")
         [void]$moduleManifestString.AppendLine('')
         [void]$moduleManifestString.AppendLine('            # ReleaseNotes of this module')
-        [void]$moduleManifestString.AppendLine("            ReleaseNotes = 'Module belongs to Microsoft365DSC v$($Version)'")
+        [void]$moduleManifestString.AppendLine("            ReleaseNotes = 'Module belongs to Microsoft365DSC v$($m365dscVersion)'")
         [void]$moduleManifestString.AppendLine('')
         [void]$moduleManifestString.AppendLine("            ExternalModuleDependencies = @('Microsoft365DSC', 'DscBuildHelpers')")
         [void]$moduleManifestString.AppendLine('')

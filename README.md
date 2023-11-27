@@ -31,5 +31,4 @@ The code will implement each DSC resource found in Microsoft365DSC, but there ar
 
 ## ToDo
 
-- Cache errors and output overview at the end.
 - Update output logging
