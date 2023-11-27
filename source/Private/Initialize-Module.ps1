@@ -74,7 +74,7 @@ function Initialize-Module
         [void]$moduleManifestString.AppendLine('    # Modules that must be imported into the global environment prior to importing this module')
         [void]$moduleManifestString.AppendLine('    RequiredModules      = @(')
         [void]$moduleManifestString.AppendLine("        @{ModuleName='DscBuildHelpers'; ModuleVersion ='0.2.1'; GUID='23ccd4bf-0a52-4077-986f-c153893e5a6a'}")
-        [void]$moduleManifestString.AppendLine("        @{ModuleName='Microsoft365DSC'; RequiredVersion='$m365dscVersion'; GUID='39f599a6-d212-4480-83b3-a8ea2124d8cf'})")
+        [void]$moduleManifestString.AppendLine("        @{ModuleName='Microsoft365DSC'; RequiredVersion='$m365dscVersion'; GUID='39f599a6-d212-4480-83b3-a8ea2124d8cf'}")
         [void]$moduleManifestString.AppendLine('    )')
         [void]$moduleManifestString.AppendLine('')
         [void]$moduleManifestString.AppendLine('    # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.')
