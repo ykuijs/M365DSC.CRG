@@ -15,7 +15,7 @@ function Initialize-Module
         Path to which files of the new module are written.
 
         .Example
-        Initialize-Module -Version 1.23.621.100
+        Initialize-Module -Version 1.23.1122.100
     #>
     [CmdletBinding()]
     [OutputType()]
