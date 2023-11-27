@@ -8,13 +8,14 @@ function New-CompositeResourceModule
         This function generates a new module with composite resources for Microsoft365DSC, split into workloads.
 
         .Example
-        New-CompositeResourceModule -OutputPath 'C:\Temp'
+        New-CompositeResourceModule -OutputPath 'C:\Temp' -Version '11.23.1122.100'
 
         .Parameter OutputPath
         Specifies the path in which the new module should be generated.
 
         .Parameter Version
-        Specifies the version of Microsoft365DSC for which the new module should be generated.
+        Specifies the version of the new module should be generated. This should be related to the version of Microsoft365DSC.
+        E.g. Version is 1.23.1122.100 when the Microsoft365DSC version is 1.23.1122.1
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification="Using Write-Host to format output")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "", Justification="Not changing state")]
@@ -121,8 +122,9 @@ function New-CompositeResourceModule
 
         #region Main script
         # Get the Microsoft365DSC module
+        $m365dscVersion = $Version.Substring(0, $Version.LastIndexOf('.') + 2)
         [Array]$m365Module = Get-Module Microsoft365DSC -ListAvailable | Where-Object -FilterScript {
-            $_.Version -eq $Version
+            $_.Version -eq $m365dscVersion
         }
 
         # Check if the module has been retrieved or not
@@ -135,7 +137,7 @@ function New-CompositeResourceModule
             }
 
             # Initialize the module
-            Initialize-Module -Version $version -OutputPath $OutputPath
+            Initialize-Module -Version $Version -OutputPath $OutputPath
 
             # Get the module root path and find all schema.mof files in the module
             $m365modulePath = Split-Path -Path $m365Module.Path -Parent
@@ -247,7 +249,7 @@ function New-CompositeResourceModule
                     {
                         # Is a subsequent workload, so wrap up previous workload and save resource
                         [void]$configString.Append('}')
-                        Save-Resource -Config $configString.ToString() -Workload $lastWorkload -Version $version -OutputPath $OutputPath
+                        Save-Resource -Config $configString.ToString() -Workload $lastWorkload -Version $Version -OutputPath $OutputPath
                     }
 
                     $lastWorkload = $resourceWorkload
@@ -505,7 +507,7 @@ function New-CompositeResourceModule
 
             # Last workload is processed. Make sure the this resource is also saved to file
             [void]$configString.Append('}')
-            Save-Resource -Config $configString.ToString() -Workload $lastWorkload -Version $version -OutputPath $OutputPath
+            Save-Resource -Config $configString.ToString() -Workload $lastWorkload -Version $Version -OutputPath $OutputPath
 
             Write-Host -Object 'Writing ConfigurationData file' -ForegroundColor Cyan
             $psdStringData = "# ($(Get-Date -f 'yyyy-MM-dd HH:mm:ss')) Generated using Microsoft365DSC v$($m365Module.Version)`n"

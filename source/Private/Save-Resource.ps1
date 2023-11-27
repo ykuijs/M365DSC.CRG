@@ -21,7 +21,7 @@ function Save-Resource
         Path to which files of the new composite resource are written.
 
         .Example
-        Save-Resource -Config $content.ToString() -Workload 'Teams' -Version 1.23.621.1 -OutputPath $OutputPath
+        Save-Resource -Config $content.ToString() -Workload 'Teams' -Version 1.23.1122.100 -OutputPath $OutputPath
     #>
     [CmdletBinding()]
     [OutputType()]

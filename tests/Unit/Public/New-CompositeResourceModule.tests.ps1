@@ -13,7 +13,8 @@ Describe New-CompositeResourceModule {
     BeforeAll {
         Mock -CommandName Write-Host -MockWith {} -ModuleName $dscModuleName
 
-        $testVersion = '1.23.1108.1'
+        $testVersion = '1.23.1108.100'
+        $testM365DSCVersion = '1.23.1108.1'
 
         function Test-IsPsCustomObject
         {
@@ -96,7 +97,7 @@ Describe New-CompositeResourceModule {
     Context 'Function succeeds, module is created correctly' {
         BeforeAll {
             Mock -CommandName Test-Path -MockWith { return $true } -ModuleName $dscModuleName
-            Mock -CommandName Get-Module -MockWith { return @(@{Name = 'Microsoft365DSC';Version = $testVersion;Path = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion"}) } -ModuleName $dscModuleName
+            Mock -CommandName Get-Module -MockWith { return @(@{Name = 'Microsoft365DSC';Version = $testM365DSCVersion;Path = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testM365DSCVersion"}) } -ModuleName $dscModuleName
             Mock -CommandName Initialize-Module -MockWith {} -ModuleName $dscModuleName
             Mock -CommandName Get-ChildItem -MockWith {
                 return @(
