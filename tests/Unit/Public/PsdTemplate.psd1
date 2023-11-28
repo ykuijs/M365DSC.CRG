@@ -15,7 +15,7 @@
         AppCredentials = @(
             @{
                 ApplicationId = '878459e4-79e4-4f9a-83d6-738c32ddd5c2'
-                Workload = 'AAD'
+                Workload = 'AzureAD'
                 CertThumbprint = '65E427769F27CDA198231B2A7FF03940897FB687'
             }
             @{
@@ -64,7 +64,7 @@
                 CertThumbprint = '65E427769F27CDA198231B2A7FF03940897FB687'
             }
         )
-        AAD = @{
+        AzureAD = @{
             Applications = @(
                 @{
                     Owners = 'StringArray | Optional'
