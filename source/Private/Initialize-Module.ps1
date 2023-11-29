@@ -118,7 +118,7 @@ function Initialize-Module
         [void]$moduleManifestString.AppendLine('            # ReleaseNotes of this module')
         [void]$moduleManifestString.AppendLine("            ReleaseNotes = 'Module belongs to Microsoft365DSC v$($m365dscVersion)'")
         [void]$moduleManifestString.AppendLine('')
-        [void]$moduleManifestString.AppendLine("            ExternalModuleDependencies = @('Microsoft365DSC', 'DscBuildHelpers')")
+        [void]$moduleManifestString.AppendLine("            ExternalModuleDependencies = @('Microsoft365DSC')")
         [void]$moduleManifestString.AppendLine('')
         [void]$moduleManifestString.AppendLine('        }')
         [void]$moduleManifestString.AppendLine('    }')
