@@ -1430,7 +1430,7 @@
                 @{
                     Name = 'NotifyOwnersWhenInvitationsAccepted'
                     ValueMap = $null
-                    Description = 'When true and when an external user accepts an invitation to a resource in a userâs OneDrive for Business owner is notified by e-mail'
+                    Description = 'When true and when an external user accepts an invitation to a resource in a users OneDrive for Business owner is notified by e-mail'
                     DataType = 'Boolean'
                     State = 'Write'
                     IsArray = $false
