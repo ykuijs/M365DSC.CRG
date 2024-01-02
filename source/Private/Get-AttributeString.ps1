@@ -69,11 +69,11 @@ function Get-AttributeString
 
                     if ($null -eq $embeddedProperty.ValueMap)
                     {
-                        $ConfigData.$($property.Name)[0].$($embeddedProperty.Name) = ('{0} | {1}' -f $embeddedProperty.DataType, $state)
+                        $ConfigData.$($property.Name)[0].$($embeddedProperty.Name) = ('{0} | {1} | {2}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description)
                     }
                     else
                     {
-                        $ConfigData.$($property.Name)[0].$($embeddedProperty.Name) = ('{0} | {1} | {2}' -f $embeddedProperty.DataType, $state, ($embeddedProperty.ValueMap -join ' / '))
+                        $ConfigData.$($property.Name)[0].$($embeddedProperty.Name) = ('{0} | {1} | {2} | {3}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description, ($embeddedProperty.ValueMap -join ' / '))
                     }
                 }
                 else
@@ -98,11 +98,11 @@ function Get-AttributeString
 
                     if ($null -eq $embeddedProperty.ValueMap)
                     {
-                        $ConfigData.$($property.Name).$($embeddedProperty.Name) = ('{0} | {1}' -f $embeddedProperty.DataType, $state)
+                        $ConfigData.$($property.Name).$($embeddedProperty.Name) = ('{0} | {1} | {2}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description)
                     }
                     else
                     {
-                        $ConfigData.$($property.Name).$($embeddedProperty.Name) = ('{0} | {1} | {2}' -f $embeddedProperty.DataType, $state, ($embeddedProperty.ValueMap -join ' / '))
+                        $ConfigData.$($property.Name).$($embeddedProperty.Name) = ('{0} | {1} | {2} | {3}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description, ($embeddedProperty.ValueMap -join ' / '))
                     }
                 }
                 else

@@ -5,11 +5,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added parameter description to the example datafile generation.
+
+### Changed
+
+- Updated the NonNodeData\AppCredentials and Environment values to type definitions, in order to allow validation code to work consistently.
+
+### Fixed
+
+- Fixed RuleEvaluation filter bug that added incorrect data to the example datafile.
+
 ## [0.1.11] - 2023-11-29
+
+### Changed
 
 - Removed DscBuildHelpers module from ExternalModuleDependencies parameter in the module manifest
 
 ## [0.1.10] - 2023-11-28
+
+### Changed
 
 - Changed AAD resource name to AzureAD
 

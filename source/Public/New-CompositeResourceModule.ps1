@@ -53,67 +53,22 @@ function New-CompositeResourceModule
         $configData = [Ordered]@{
             AllNodes    = @(
                 @{
-                    NodeName        = 'localhost'
-                    CertificateFile = '.\DSCCertificate.cer'
+                    NodeName        = 'String | Required | Name of the host of which the LCM is used, normally this is localhost'
+                    CertificateFile = 'String | Required | Relative path to the public key of the DSC credential encryption certificate, e.g. .\DSCCertificate.cer'
                 }
             )
             NonNodeData = [Ordered]@{
                 Environment    = @{
-                    Name             = '[Name of your environment, e.g. Test]'
-                    ShortName        = '[Abbreviation of the environment name, e.g. TST]'
-                    TenantId         = '[Tenant URL, e.g. test.onmicrosoft.com]'
-                    OrganizationName = '[Name of your organization, e.g. Test]'
+                    Name             = 'String | Required | Name of your environment, e.g. TestEnvironment'
+                    ShortName        = 'String | Required | Abbreviation of the environment name, e.g. TST'
+                    TenantId         = 'String | Required | Tenant URL, e.g. test.onmicrosoft.com'
+                    OrganizationName = 'String | Required | Name of your organization, prefix of the tenant id, e.g. test'
                 }
                 AppCredentials = @(
                     @{
-                        Workload       = 'AzureAD'
-                        ApplicationId  = '878459e4-79e4-4f9a-83d6-738c32ddd5c2'
-                        CertThumbprint = '65E427769F27CDA198231B2A7FF03940897FB687'
-                    }
-                    @{
-                        Workload       = 'Exchange'
-                        ApplicationId  = '878459e4-79e4-4f9a-83d6-738c32ddd5c2'
-                        CertThumbprint = '65E427769F27CDA198231B2A7FF03940897FB687'
-                    }
-                    @{
-                        Workload       = 'Intune'
-                        ApplicationId  = '878459e4-79e4-4f9a-83d6-738c32ddd5c2'
-                        CertThumbprint = '65E427769F27CDA198231B2A7FF03940897FB687'
-                    }
-                    @{
-                        Workload       = 'Office365'
-                        ApplicationId  = '878459e4-79e4-4f9a-83d6-738c32ddd5c2'
-                        CertThumbprint = '65E427769F27CDA198231B2A7FF03940897FB687'
-                    }
-                    @{
-                        Workload       = 'OneDrive'
-                        ApplicationId  = '878459e4-79e4-4f9a-83d6-738c32ddd5c2'
-                        CertThumbprint = '65E427769F27CDA198231B2A7FF03940897FB687'
-                    }
-                    @{
-                        Workload       = 'Planner'
-                        ApplicationId  = '878459e4-79e4-4f9a-83d6-738c32ddd5c2'
-                        CertThumbprint = '65E427769F27CDA198231B2A7FF03940897FB687'
-                    }
-                    @{
-                        Workload       = 'PowerPlatform'
-                        ApplicationId  = '878459e4-79e4-4f9a-83d6-738c32ddd5c2'
-                        CertThumbprint = '65E427769F27CDA198231B2A7FF03940897FB687'
-                    }
-                    @{
-                        Workload       = 'SecurityCompliance'
-                        ApplicationId  = '878459e4-79e4-4f9a-83d6-738c32ddd5c2'
-                        CertThumbprint = '65E427769F27CDA198231B2A7FF03940897FB687'
-                    }
-                    @{
-                        Workload       = 'SharePoint'
-                        ApplicationId  = '878459e4-79e4-4f9a-83d6-738c32ddd5c2'
-                        CertThumbprint = '65E427769F27CDA198231B2A7FF03940897FB687'
-                    }
-                    @{
-                        Workload       = 'Teams'
-                        ApplicationId  = '878459e4-79e4-4f9a-83d6-738c32ddd5c2'
-                        CertThumbprint = '65E427769F27CDA198231B2A7FF03940897FB687'
+                        Workload       = 'String | Required | Name of the Workload for which this credential will be used | AzureAD / Exchange / Intune / Office365 / OneDrive / Planner / PowerPlatform / SecurityCompliance / SharePoint / Teams'
+                        ApplicationId  = 'Guid | Required | The GUID of the Entra ID Service Principal'
+                        CertThumbprint = 'String | Required | The Certificate Thumbprint of the certificate used for authentication'
                     }
                 )
             }
@@ -157,7 +112,7 @@ function New-CompositeResourceModule
             $lastWorkload = ''
 
             # Loop through all the Schema files found in the modules folder
-            foreach ($mofSchemaFile in $mofSchemaFiles)
+            :schemaloop foreach ($mofSchemaFile in $mofSchemaFiles)
             {
                 # Read schema
                 $mofSchemas = Get-MofSchemaObject -FileName $mofSchemaFile.FullName
@@ -228,6 +183,7 @@ function New-CompositeResourceModule
                     { $_.StartsWith('M365DSC') }
                     {
                         Write-Host '    Skipping M365DSC workload (RuleEvaluation)' -ForegroundColor 'Yellow'
+                        continue schemaloop
                     }
                     Default
                     {
@@ -459,7 +415,7 @@ function New-CompositeResourceModule
 
                 if ($filteredProperties.Name -notcontains "Id" -and $filteredProperties.Name -notcontains "Identity")
                 {
-                    $currentDataObject.UniqueId = ('{0} | {1} | {2}' -f "String", "Required", "[Unique ID to identify this specific object]")
+                    $currentDataObject.UniqueId = ('{0} | {1} | {2}' -f "String", "Required", "Unique ID to identify this specific object")
                 }
 
                 # Loop through all the filtered properties and build example config data file
@@ -491,11 +447,11 @@ function New-CompositeResourceModule
 
                             if ($null -eq $property.ValueMap)
                             {
-                                $currentDataObject.$($property.Name) = ('{0} | {1}' -f $propertyDataType, $state)
+                                $currentDataObject.$($property.Name) = ('{0} | {1} | {2}' -f $propertyDataType, $state, $property.Description)
                             }
                             else
                             {
-                                $currentDataObject.$($property.Name) = ('{0} | {1} | {2}' -f $propertyDataType, $state, ($property.ValueMap -join ' / '))
+                                $currentDataObject.$($property.Name) = ('{0} | {1} | {2} | {3}' -f $propertyDataType, $state, $property.Description, ($property.ValueMap -join ' / '))
                             }
                         }
                     }
