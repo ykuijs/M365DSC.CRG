@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.11] - 2023-11-29
+
 - Removed DscBuildHelpers module from ExternalModuleDependencies parameter in the module manifest
 
 ## [0.1.10] - 2023-11-28
