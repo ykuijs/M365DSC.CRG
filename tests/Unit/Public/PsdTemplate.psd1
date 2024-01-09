@@ -144,7 +144,6 @@
         }
         Office365 = @{
             AdminAuditLogConfig = @{
-                UniqueId = 'String | Required | Unique ID to identify this specific object'
                 UnifiedAuditLogIngestionEnabled = 'String | Required | Determins if Unified Audit Log Ingestion is enabled | Enabled / Disabled'
                 Ensure = 'String | Optional | ''Present'' is the only value accepted. | Present'
             }
@@ -155,7 +154,6 @@
                 NotifyOwnersWhenInvitationsAccepted = 'Boolean | Optional | When true and when an external user accepts an invitation to a resource in a users OneDrive for Business owner is notified by e-mail'
                 GrooveBlockOption = 'String | Optional | Groove block options | OptOut / HardOptIn / SoftOptIn'
                 TenantRestrictionEnabled = 'Boolean | Optional | Enable/disable Safe domain List - if disabled overrides DomainGuids value'
-                UniqueId = 'String | Required | Unique ID to identify this specific object'
                 DisableReportProblemDialog = 'Boolean | Optional | Disable dialog box'
                 ODBMembersCanShare = 'String | Optional | Lets administrators set policy on re-sharing behavior in OneDrive for Business | On / Off / Unspecified'
                 Ensure = 'String | Optional | Present ensures the user exists, absent ensures it is removed | Present / Absent'
@@ -185,7 +183,6 @@
                 WalkMeOptOut = 'Boolean | Optional | When set to true this will disable the Walk Me guidance.'
                 ShareWithColleaguesUserLimit = 'UInt32 | Optional | The amount of people an app can be shared with in Dataverse for Teams (maximum is 10,000).'
                 DisableCapacityAllocationByEnvironmentAdmins = 'Boolean | Optional | When set to true this will disable capacity allocation by environment admins.'
-                UniqueId = 'String | Required | Unique ID to identify this specific object'
                 DisableNewsletterSendout = 'Boolean | Optional | When set to true this will disable the monthly newsletters.'
                 DisableDocsSearch = 'Boolean | Optional | When set to true this will disable docs search in the Office 365 Suite navigation bar.'
                 DisableEnvironmentCreationByNonAdminUsers = 'Boolean | Optional | When set to true this will disable production environment creation by non-admin users.'
@@ -218,7 +215,6 @@
                 FilePickerExternalImageSearchEnabled = 'Boolean | Optional | '
                 MaxCompatibilityLevel = 'UInt32 | Optional | Specifies the upper bound on the compatibility level for new sites.'
                 Ensure = 'String | Optional | Only accepted value is ''Present''. | Present / Absent'
-                UniqueId = 'String | Required | Unique ID to identify this specific object'
                 HideSyncButtonOnTeamSite = 'Boolean | Optional | To enable or disable Sync button on Team sites'
                 UserVoiceForFeedbackEnabled = 'Boolean | Optional | Allow feedback via UserVoice.'
                 OwnerAnonymousNotification = 'Boolean | Optional | '

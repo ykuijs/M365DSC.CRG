@@ -413,7 +413,7 @@ function New-CompositeResourceModule
 
                 $script:currentDepth = 0
 
-                if ($filteredProperties.Name -notcontains "Id" -and $filteredProperties.Name -notcontains "Identity")
+                if ($filteredProperties.Name -notcontains "Id" -and $filteredProperties.Name -notcontains "Identity" -and $filteredProperties.Name -notcontains "IsSingleInstance")
                 {
                     $currentDataObject.UniqueId = ('{0} | {1} | {2}' -f "String", "Required", "Unique ID to identify this specific object")
                 }
