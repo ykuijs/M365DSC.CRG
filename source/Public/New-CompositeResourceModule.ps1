@@ -413,7 +413,11 @@ function New-CompositeResourceModule
 
                 $script:currentDepth = 0
 
-                if ($filteredProperties.Name -notcontains "Id" -and $filteredProperties.Name -notcontains "Identity" -and $filteredProperties.Name -notcontains "IsSingleInstance")
+                # Check if the resource needs a UniqueId parameter by checking if the names of the properties contain
+                # any of the below property names. If they don't, a UniqueId is required.
+                $propertiesNeedUniqueId = @("Id", "Identity", "IsSingleInstance")
+                $diff = Compare-Object -ReferenceObject $filteredProperties.Name -DifferenceObject $propertiesNeedUniqueId -ExcludeDifferent -IncludeEqual
+                if ($null -eq $diff)
                 {
                     $currentDataObject.UniqueId = ('{0} | {1} | {2}' -f "String", "Required", "Unique ID to identify this specific object")
                 }

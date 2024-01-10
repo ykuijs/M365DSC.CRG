@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Fixed issue where the UniqueId parameter was added incorrectly for resources that had the IsSingleInstance parameter
+
 ## [0.1.12] - 2024-01-02
 
 ### Added
