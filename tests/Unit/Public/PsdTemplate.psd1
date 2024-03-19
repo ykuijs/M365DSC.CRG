@@ -11,6 +11,19 @@
             TenantId = 'String | Required | Tenant URL, e.g. test.onmicrosoft.com'
             Name = 'String | Required | Name of your environment, e.g. TestEnvironment'
             ShortName = 'String | Required | Abbreviation of the environment name, e.g. TST'
+            CICD             = @{
+                DependsOn     = 'String | Required | Name of the environment this environment depends on, e.g. TestEnvironment'
+                UseCodeBranch = 'String | Required | Name of the branch that is used for the CICD (Script) repository, e.g. main'
+                Approvers = @(
+                    @{
+                        Principal = 'String | Required | Principal of the user or groups that needs to get added to the approvers list.'
+                        Type      = 'String | Required | Type of principal | User / Group'
+                    }
+                )
+            }
+            Tokens = @{
+                ExampleToken = 'String | Optional | Example of a token that can be used anywhere in the config, by specifying {{ExampleToken}}'
+            }
         }
         AppCredentials = @(
             @{
