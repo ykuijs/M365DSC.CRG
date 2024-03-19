@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Added CICD parameter under the Environment branch in the Example data
+
 ## [0.1.13] - 2024-01-10
 
 - Fixed issue where the UniqueId parameter was added incorrectly for resources that had the IsSingleInstance parameter
