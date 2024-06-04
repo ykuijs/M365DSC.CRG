@@ -16,6 +16,7 @@
     "files.trimTrailingWhitespace": true,
     "files.trimFinalNewlines": true,
     "files.insertFinalNewline": true,
+    "files.encoding": "utf8",
     "files.associations": {
         "*.ps1xml": "xml"
     },

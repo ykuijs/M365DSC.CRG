@@ -401,7 +401,7 @@ function New-CompositeResourceModule
                 [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), '}'))
 
                 $script:currentDepth = 0
-                $script:maxDepth = 5
+                $script:maxDepth = 8
 
                 # Process all parameters, but handle embedded parameters separately
                 $result = Get-EmbeddedPropertyString -Properties $resourceSchema.Attributes -Indentation $indent -ParameterName '$parameters'
@@ -464,12 +464,29 @@ function New-CompositeResourceModule
 
                             if ($null -eq $property.ValueMap)
                             {
-                                $currentDataObject.$($property.Name) = ('{0} | {1} | {2}' -f $propertyDataType, $state, $property.Description)
+                                if ($propertyDataType -like "*Array")
+                                {
+                                    $propertyDataType = $propertyDataType -replace "Array"
+                                    $result = @(('{0} | {1} | {2}' -f $propertyDataType, $state, $property.Description))
+                                }
+                                else
+                                {
+                                    $result = ('{0} | {1} | {2}' -f $propertyDataType, $state, $property.Description)
+                                }
                             }
                             else
                             {
-                                $currentDataObject.$($property.Name) = ('{0} | {1} | {2} | {3}' -f $propertyDataType, $state, $property.Description, ($property.ValueMap -join ' / '))
+                                if ($propertyDataType -like "*Array")
+                                {
+                                    $propertyDataType = $propertyDataType -replace "Array"
+                                    $result = ('{0} | {1} | {2} | {3}' -f $propertyDataType, $state, $property.Description, ($property.ValueMap -join ' / '))
+                                }
+                                else
+                                {
+                                    $result = ('{0} | {1} | {2} | {3}' -f $propertyDataType, $state, $property.Description, ($property.ValueMap -join ' / '))
+                                }
                             }
+                            $currentDataObject.$($property.Name) = $result
                         }
                     }
                 }

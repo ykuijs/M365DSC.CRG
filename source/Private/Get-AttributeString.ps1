@@ -69,12 +69,29 @@ function Get-AttributeString
 
                     if ($null -eq $embeddedProperty.ValueMap)
                     {
-                        $ConfigData.$($property.Name)[0].$($embeddedProperty.Name) = ('{0} | {1} | {2}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description)
+                        if ($embeddedProperty.DataType -like "*Array")
+                        {
+                            $dataType = $embeddedProperty.DataType -replace "Array"
+                            $result = @(('{0} | {1} | {2}' -f $dataType, $state, $embeddedProperty.Description))
+                        }
+                        else
+                        {
+                            $result = ('{0} | {1} | {2}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description)
+                        }
                     }
                     else
                     {
-                        $ConfigData.$($property.Name)[0].$($embeddedProperty.Name) = ('{0} | {1} | {2} | {3}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description, ($embeddedProperty.ValueMap -join ' / '))
+                        if ($embeddedProperty.DataType -like "*Array")
+                        {
+                            $dataType = $embeddedProperty.DataType -replace "Array"
+                            $result = @(('{0} | {1} | {2} | {3}' -f $dataType, $state, $embeddedProperty.Description, ($embeddedProperty.ValueMap -join ' / ')))
+                        }
+                        else
+                        {
+                            $result = ('{0} | {1} | {2} | {3}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description, ($embeddedProperty.ValueMap -join ' / '))
+                        }
                     }
+                    $ConfigData.$($property.Name)[0].$($embeddedProperty.Name) = $result
                 }
                 else
                 {
@@ -98,12 +115,29 @@ function Get-AttributeString
 
                     if ($null -eq $embeddedProperty.ValueMap)
                     {
-                        $ConfigData.$($property.Name).$($embeddedProperty.Name) = ('{0} | {1} | {2}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description)
+                        if ($embeddedProperty.DataType -like "*Array")
+                        {
+                            $dataType = $embeddedProperty.DataType -replace "Array"
+                            $result = @(('{0} | {1} | {2}' -f $dataType, $state, $embeddedProperty.Description))
+                        }
+                        else
+                        {
+                            $result = ('{0} | {1} | {2}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description)
+                        }
                     }
                     else
                     {
-                        $ConfigData.$($property.Name).$($embeddedProperty.Name) = ('{0} | {1} | {2} | {3}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description, ($embeddedProperty.ValueMap -join ' / '))
+                        if ($embeddedProperty.DataType -like "*Array")
+                        {
+                            $dataType = $embeddedProperty.DataType -replace "Array"
+                            $result = @(('{0} | {1} | {2} | {3}' -f $dataType, $state, $embeddedProperty.Description, ($embeddedProperty.ValueMap -join ' / ')))
+                        }
+                        else
+                        {
+                            $result = ('{0} | {1} | {2} | {3}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description, ($embeddedProperty.ValueMap -join ' / '))
+                        }
                     }
+                    $ConfigData.$($property.Name).$($embeddedProperty.Name) = $result
                 }
                 else
                 {

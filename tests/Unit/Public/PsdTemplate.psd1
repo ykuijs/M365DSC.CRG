@@ -35,13 +35,19 @@
         AzureAD = @{
             Applications = @(
                 @{
-                    Owners = 'StringArray | Optional | UPN or ObjectID values of the app''s owners.'
+                    Owners = @(
+                        'String | Optional | UPN or ObjectID values of the app''s owners.'
+                    )
                     AvailableToOtherTenants = 'Boolean | Optional | Indicates whether this application is available in other tenants.'
                     GroupMembershipClaims = 'String | Optional | A bitmask that configures the groups claim issued in a user or OAuth 2.0 access token that the application expects. The bitmask values are: 0: None, 1: Security groups and Azure AD roles, 2: Reserved, and 4: Reserved. Setting the bitmask to 7 will get all of the security groups, distribution groups, and Azure AD directory roles that the signed-in user is a member of.'
                     ObjectId = 'String | Optional | ObjectID of the app.'
-                    IdentifierUris = 'StringArray | Optional | User-defined URI(s) that uniquely identify a Web application within its Azure AD tenant, or within a verified custom domain.'
+                    IdentifierUris = @(
+                        'String | Optional | User-defined URI(s) that uniquely identify a Web application within its Azure AD tenant, or within a verified custom domain.'
+                    )
                     UniqueId = 'String | Required | Unique ID to identify this specific object'
-                    KnownClientApplications = 'StringArray | Optional | Client applications that are tied to this resource application.'
+                    KnownClientApplications = @(
+                        'String | Optional | Client applications that are tied to this resource application.'
+                    )
                     DisplayName = 'String | Required | DisplayName of the app'
                     Permissions = @(
                         @{
@@ -53,7 +59,9 @@
                         }
                     )
                     Ensure = 'String | Optional | Specify if the Azure AD App should exist or not. | Present / Absent'
-                    ReplyURLs = 'StringArray | Optional | Specifies the URLs that user tokens are sent to for sign in, or the redirect URIs that OAuth 2.0 authorization codes and access tokens are sent to.'
+                    ReplyURLs = @(
+                        'String | Optional | Specifies the URLs that user tokens are sent to for sign in, or the redirect URIs that OAuth 2.0 authorization codes and access tokens are sent to.'
+                    )
                     PublicClient = 'Boolean | Optional | Specifies whether this application is a public client (such as an installed application running on a mobile device). Default is false.'
                     AppId = 'String | Optional | AppId for the app.'
                     Homepage = 'String | Optional | The URL to the application''s homepage.'
@@ -96,8 +104,12 @@
                     Description = 'String | Optional | Description of the endpoint protection policy for Windows 10.'
                     disablenetworkui = 'String | Optional | Use this policy setting if you want to disable the display of the firewall and network protection area in Windows Defender Security Center. (0: disable feature. 1: enable feature) | 0 / 1'
                     severethreats = 'String | Optional | Allows an administrator to specify high severity threats corresponding action ID to take. | clean / quarantine / remove / allow / userdefined / block'
-                    excludedprocesses = 'StringArray | Optional | Allows an administrator to specify a list of files opened by processes to ignore during a scan.'
-                    excludedpaths = 'StringArray | Optional | Allows an administrator to specify a list of directory paths to ignore during a scan.'
+                    excludedprocesses = @(
+                        'String | Optional | Allows an administrator to specify a list of files opened by processes to ignore during a scan.'
+                    )
+                    excludedpaths = @(
+                        'String | Optional | Allows an administrator to specify a list of directory paths to ignore during a scan.'
+                    )
                     daystoretaincleanedmalware = 'SInt32 | Optional | Time period (in days) that quarantine items will be stored on the system.'
                     allowarchivescanning = 'String | Optional | Allows or disallows scanning of archives. (0: disable feature. 1: enable feature) | 0 / 1'
                     companyname = 'String | Optional | The company name that is displayed to the users. CompanyName is required for both EnableCustomizedToasts and EnableInAppCustomization.'
@@ -105,7 +117,9 @@
                     enableinappcustomization = 'String | Optional | Enable this policy to have your company name and contact options displayed in a contact card fly out in Windows Defender Security Center. (0: disable feature. 1: enable feature) | 0 / 1'
                     allowscriptscanning = 'String | Optional | Allows or disallows Windows Defender Script Scanning functionality. (0: disable feature. 1: enable feature) | 0 / 1'
                     signatureupdateinterval = 'SInt32 | Optional | Specifies the interval (in hours) that will be used to check for signatures, so instead of using the ScheduleDay and ScheduleTime the check for new signatures will be set according to the interval.'
-                    signatureupdatefilesharessources = 'StringArray | Optional | This policy setting allows you to configure UNC file share sources for downloading definition updates.'
+                    signatureupdatefilesharessources = @(
+                        'String | Optional | This policy setting allows you to configure UNC file share sources for downloading definition updates.'
+                    )
                     disablecleartpmbutton = 'String | Optional | Disable the Clear TPM button in Windows Security. (0: disable feature. 1: enable feature) | 0 / 1'
                     cloudextendedtimeout = 'SInt32 | Optional | This feature allows Microsoft Defender Antivirus to block a suspicious file for up to 60 seconds, and scan it in the cloud to make sure it''s safe. Value type is integer, range is 0 - 50.'
                     allowscanningnetworkfiles = 'String | Optional | Allows or disallows a scanning of network files. (0: disable feature. 1: enable feature) | 0 / 1'
@@ -117,7 +131,9 @@
                     allowrealtimemonitoring = 'String | Optional | Allows or disallows Windows Defender real-time Monitoring functionality. (0: disable feature. 1: enable feature) | 0 / 1'
                     allowuseruiaccess = 'String | Optional | Allows or disallows user access to the Windows Defender UI. I disallowed, all Windows Defender notifications will also be suppressed. (0: Prevents users from accessing UI. 1: Lets users access UI) | 0 / 1'
                     disablecatchupfullscan = 'String | Optional | This policy setting allows you to configure catch-up scans for scheduled full scans.  (1: disabled, 0: enabled) | 0 / 1'
-                    excludedextensions = 'StringArray | Optional | Allows an administrator to specify a list of file type extensions to ignore during a scan.'
+                    excludedextensions = @(
+                        'String | Optional | Allows an administrator to specify a list of file type extensions to ignore during a scan.'
+                    )
                     disablecatchupquickscan = 'String | Optional | This policy setting allows you to configure catch-up scans for scheduled quick scans.  (1: disabled, 0: enabled) | 0 / 1'
                     disableappbrowserui = 'String | Optional | Use this policy setting if you want to disable the display of the app and browser protection area in Windows Defender Security Center. (0: disable feature. 1: enable feature) | 0 / 1'
                     disablehealthui = 'String | Optional | Use this policy setting if you want to disable the display of the device performance and health area in Windows Defender Security Center. (0: disable feature. 1: enable feature) | 0 / 1'
@@ -133,7 +149,9 @@
                     schedulescanday = 'String | Optional | Selects the day that the Windows Defender scan should run. (0: Every day, 1: Sunday, 2: Monday, 3: Tuesday, 4: Wednesday, 5: Thursday, 6: Friday, 7: Saturday, 8: No scheduled scan) | 0 / 1 / 2 / 3 / 4 / 5 / 6 / 7 / 8'
                     allowfullscanremovabledrivescanning = 'String | Optional | Allows or disallows a full scan of removable drives. During a quick scan, removable drives may still be scanned. (0: disable feature. 1: enable feature) | 0 / 1'
                     disabletpmfirmwareupdatewarning = 'String | Optional | Hide the recommendation to update TPM Firmware when a vulnerable firmware is detected. (0: disable feature. 1: enable feature) | 0 / 1'
-                    signatureupdatefallbackorder = 'StringArray | Optional | This policy setting allows you to define the order in which different definition update sources should be contacted.'
+                    signatureupdatefallbackorder = @(
+                        'String | Optional | This policy setting allows you to define the order in which different definition update sources should be contacted.'
+                    )
                     enablenetworkprotection = 'String | Optional | This policy allows you to turn on network protection (block/audit) or off. (0: disabled, 1: block mode, 2: audit mode) | 0 / 1 / 2'
                     submitsamplesconsent = 'String | Optional | Checks for the user consent level in Windows Defender to send data. (0: Always prompt, 1: Send safe samples automatically, 2: Never send, 3: Send all samples automatically) | 0 / 1 / 2 / 3'
                     disabledevicesecurityui = 'String | Optional | Use this policy setting if you want to disable the display of the Device security area in the Windows Defender Security Center. (0: disable feature. 1: enable feature) | 0 / 1'
@@ -171,12 +189,16 @@
                 ODBMembersCanShare = 'String | Optional | Lets administrators set policy on re-sharing behavior in OneDrive for Business | On / Off / Unspecified'
                 Ensure = 'String | Optional | Present ensures the user exists, absent ensures it is removed | Present / Absent'
                 OrphanedPersonalSitesRetentionPeriod = 'UInt32 | Optional | Number of days after a user''s account is deleted that their OneDrive for Business content will be deleted.'
-                ExcludedFileExtensions = 'StringArray | Optional | Exclude files from being synced to OneDrive'
+                ExcludedFileExtensions = @(
+                    'String | Optional | Exclude files from being synced to OneDrive'
+                )
                 NotificationsInOneDriveForBusinessEnabled = 'Boolean | Optional | Turn notifications on/off OneDrive'
                 OneDriveStorageQuota = 'UInt32 | Optional | The resource quota to apply to the OneDrive sites'
                 BlockMacSync = 'Boolean | Optional | Block sync client on Mac'
                 OneDriveForGuestsEnabled = 'Boolean | Optional | Enable guest acess for OneDrive'
-                DomainGuids = 'StringArray | Optional | Safe domain list'
+                DomainGuids = @(
+                    'String | Optional | Safe domain list'
+                )
             }
         }
         Planner = @{
@@ -252,7 +274,9 @@
                 ContentPin = 'String | Optional | This setting applies only to Skype for Business Online (not Microsoft Teams) and defines whether the user must provide a secondary form of authentication to access the meeting content from a resource device account. Meeting content is defined as files that are shared to the Content Bin - files that have been attached to the meeting. | NotRequired / RequiredOutsideScheduleMeeting / AlwaysRequired'
                 AllowSkypeBusinessInterop = 'Boolean | Optional | When set to $true, Teams conversations automatically show up in Skype for Business for users that aren''t enabled for Teams.'
                 AllowOrganizationTab = 'Boolean | Optional | When set to $true, users will be able to see the organizational chart icon other users'' contact cards, and when clicked, this icon will display the detailed organizational chart.'
-                RestrictedSenderList = 'StringArray | Optional | Senders domains can be further restricted to ensure that only allowed SMTP domains can send emails to the Teams channels. This is a comma-separated string of the domains you''d like to allow to send emails to Teams channels.'
+                RestrictedSenderList = @(
+                    'String | Optional | Senders domains can be further restricted to ensure that only allowed SMTP domains can send emails to the Teams channels. This is a comma-separated string of the domains you''d like to allow to send emails to Teams channels.'
+                )
                 AllowResourceAccountSendMessage = 'Boolean | Optional | Surface Hub uses a device account to provide email and collaboration services (IM, video, voice). This device account is used as the originating identity (the from party) when sending email, IM, and placing calls. As this account is not coming from an individual, identifiable user, it is deemed anonymous because it originated from the Surface Hub''s device account. If set to $true, these device accounts will be able to send chat messages in Skype for Business Online (does not apply to Microsoft Teams).'
                 AllowDropBox = 'Boolean | Optional | Designates whether users are able to leverage DropBox as a third party storage solution in Microsoft Teams. If $true, users will be able to add DropBox in the client and interact with the files stored there.'
                 AllowEgnyte = 'Boolean | Optional | Designates whether users are able to leverage Egnyte as a third party storage solution in Microsoft Teams. If $true, users will be able to add Egnyte in the client and interact with the files stored there.'

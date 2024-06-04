@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Updated StringArray data type into an actual array with string values in the ExampleDataFile
+- Changed the MaxDepth from 5 to 8, so resources are generated on a lower level
+
 ## [0.1.14] - 2024-03-26
 
 - Added CICD parameter under the Environment branch in the Example data
