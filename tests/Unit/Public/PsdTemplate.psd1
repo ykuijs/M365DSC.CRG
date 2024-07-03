@@ -21,6 +21,18 @@
                     }
                 )
             }
+            UsedWorkloads    = @{
+                AzureAD            = $true
+                Exchange           = $true
+                Intune             = $true
+                Office365          = $true
+                OneDrive           = $true
+                Planner            = $true
+                PowerPlatform      = $true
+                SecurityCompliance = $true
+                SharePoint         = $true
+                Teams              = $true
+            }
             Tokens = @{
                 ExampleToken = 'String | Optional | Example of a token that can be used anywhere in the config, by specifying {{ExampleToken}}'
             }
