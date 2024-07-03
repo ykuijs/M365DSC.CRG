@@ -73,6 +73,7 @@ function New-CompositeResourceModule
                             }
                         )
                     }
+                    UsedWorkloads = @{}
                     Tokens = @{
                         ExampleToken = 'String | Optional | Example of a token that can be used anywhere in the config, by specifying {{ExampleToken}}'
                     }
@@ -227,6 +228,8 @@ function New-CompositeResourceModule
                     {
                         $configData.NonNodeData.$resourceWorkload = [Ordered]@{}
                     }
+
+                    $configData.NonNodeData.Environment.UsedWorkloads.$resourceWorkload = $true
 
                     # Initialize new composite resource content
                     $configString = [System.Text.StringBuilder]::new()
@@ -479,7 +482,7 @@ function New-CompositeResourceModule
                                 if ($propertyDataType -like "*Array")
                                 {
                                     $propertyDataType = $propertyDataType -replace "Array"
-                                    $result = ('{0} | {1} | {2} | {3}' -f $propertyDataType, $state, $property.Description, ($property.ValueMap -join ' / '))
+                                    $result = @(('{0} | {1} | {2} | {3}' -f $propertyDataType, $state, $property.Description, ($property.ValueMap -join ' / ')))
                                 }
                                 else
                                 {

@@ -5,6 +5,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added the UsedWorkloads section to the Environments section in the Example Data File
+- Added a dependency to the SCSensitivityLabel resources for SCAutoSensitivityLabelPolicy
+
+### Fixed
+
+- Fixed issue were an array was not correctly created where this was required
+
 ## [0.1.15] - 2024-06-04
 
 ### Changed

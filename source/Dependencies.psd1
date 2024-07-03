@@ -1,4 +1,5 @@
 @{
+    SCAutoSensitivityLabelPolicy  = '$ConfigurationData.NonNodeData.SecurityCompliance.SensitivityLabels.Name | ForEach-Object { "[SCSensitivityLabel]SCSensitivityLabel-{0}" -f $_ }'
     SCAutoSensitivityLabelRule    = '$ConfigurationData.NonNodeData.SecurityCompliance.AutoSensitivityLabelPolicies.Name | ForEach-Object { "[SCAutoSensitivityLabelPolicy]SCAutoSensitivityLabelPolicy-{0}" -f $_ }'
     SCCaseHoldRule                = '$ConfigurationData.NonNodeData.SecurityCompliance.CaseHoldPolicies | ForEach-Object { "[SCCaseHoldPolicy]SCCaseHoldPolicy-{0}-{1}" -f $_.Name,$_.Case }'
     SCCaseHoldPolicy              = '$ConfigurationData.NonNodeData.SecurityCompliance.ComplianceCases.Name | ForEach-Object { "[SCComplianceCase]SCComplianceCase-{0}" -f $_ }'
