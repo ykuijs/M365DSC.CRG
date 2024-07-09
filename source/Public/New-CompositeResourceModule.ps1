@@ -229,7 +229,7 @@ function New-CompositeResourceModule
                         $configData.NonNodeData.$resourceWorkload = [Ordered]@{}
                     }
 
-                    $configData.NonNodeData.Environment.UsedWorkloads.$resourceWorkload = $true
+                    $configData.NonNodeData.Environment.UsedWorkloads.$resourceWorkload = 'Boolean | Required | Specifies if the workload should be included in the configuration'
 
                     # Initialize new composite resource content
                     $configString = [System.Text.StringBuilder]::new()

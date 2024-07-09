@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed issue were the new Workloads section was not created correctly
+
 ## [0.1.16] - 2024-07-03
 
 ### Added
