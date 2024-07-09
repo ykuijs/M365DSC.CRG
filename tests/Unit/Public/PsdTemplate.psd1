@@ -22,16 +22,16 @@
                 )
             }
             UsedWorkloads    = @{
-                AzureAD            = $true
-                Exchange           = $true
-                Intune             = $true
-                Office365          = $true
-                OneDrive           = $true
-                Planner            = $true
-                PowerPlatform      = $true
-                SecurityCompliance = $true
-                SharePoint         = $true
-                Teams              = $true
+                AzureAD            = 'Boolean | Required | Specifies if the workload should be included in the configuration'
+                Exchange           = 'Boolean | Required | Specifies if the workload should be included in the configuration'
+                Intune             = 'Boolean | Required | Specifies if the workload should be included in the configuration'
+                Office365          = 'Boolean | Required | Specifies if the workload should be included in the configuration'
+                OneDrive           = 'Boolean | Required | Specifies if the workload should be included in the configuration'
+                Planner            = 'Boolean | Required | Specifies if the workload should be included in the configuration'
+                PowerPlatform      = 'Boolean | Required | Specifies if the workload should be included in the configuration'
+                SecurityCompliance = 'Boolean | Required | Specifies if the workload should be included in the configuration'
+                SharePoint         = 'Boolean | Required | Specifies if the workload should be included in the configuration'
+                Teams              = 'Boolean | Required | Specifies if the workload should be included in the configuration'
             }
             Tokens = @{
                 ExampleToken = 'String | Optional | Example of a token that can be used anywhere in the config, by specifying {{ExampleToken}}'
