@@ -154,6 +154,11 @@ function New-CompositeResourceModule
                         $resourceWorkload = 'Exchange'
                         $customResourceName = $shortResourceName -replace '^EXO'
                     }
+                    { $_.StartsWith('Fabric') }
+                    {
+                        $resourceWorkload = 'Fabric'
+                        $customResourceName = $shortResourceName -replace "^$resourceWorkload"
+                    }
                     { $_.StartsWith('Intune') }
                     {
                         $resourceWorkload = 'Intune'

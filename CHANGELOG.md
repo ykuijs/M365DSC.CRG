@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added support for the new Fabric workload
+
 ## [0.1.17] - 2024-07-09
 
 ### Fixed
