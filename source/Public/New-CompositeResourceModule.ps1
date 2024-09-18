@@ -189,6 +189,11 @@ function New-CompositeResourceModule
                         $resourceWorkload = 'SecurityCompliance'
                         $customResourceName = $shortResourceName -replace '^SC'
                     }
+                    { $_.StartsWith('Sentinel') }
+                    {
+                        $resourceWorkload = 'Sentinel'
+                        $customResourceName = $shortResourceName -replace "^$resourceWorkload"
+                    }
                     { $_.StartsWith('SPO') }
                     {
                         $resourceWorkload = 'SharePoint'

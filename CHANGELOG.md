@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added support for the new Sentinel workload
+
 ## [0.1.18] - 2024-09-09
 
 ### Added
