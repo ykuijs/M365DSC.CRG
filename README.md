@@ -20,7 +20,7 @@ It also creates an example data file, which is included in the module. You can u
 
 ### Important notes
 
-The configuration data sometimes uses arrays of hashtables. In order to merge these items correctly, the code needs to know which items are the same. This is done by using the `Id` or `Identity` properties. When the specific DSC resource does not have one of these properties, the code will look for the `UniqueID` property. This property is removed from the hashtable before it is used in the composite resource.
+The configuration data sometimes uses arrays of hashtables. In order to merge these items correctly, the code needs to know which items are the same. This is done by using the `Id`, `Identity` or `SettingDefinitionId` properties. When the specific DSC resource does not have one of these properties, the code will look for the `UniqueID` property. This property is removed from the hashtable before it is used in the composite resource.
 
 Where DSC resources use singular names in the resource names, like `AADAdministrativeUnit`. However in the configuration data, these names are made plural, like `AADAdministrativeUnits`.
 
