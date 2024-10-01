@@ -52,7 +52,9 @@ function Get-AttributeString
         {
             $ConfigData.$($Property.Name) = @(@{})
 
-            if ($embeddedSchemas.Attributes.Name -notcontains "Id" -and $embeddedSchemas.Attributes.Name -notcontains "Identity")
+            if ($embeddedSchemas.Attributes.Name -notcontains "Id" -and `
+                $embeddedSchemas.Attributes.Name -notcontains "Identity" -and `
+                $embeddedSchemas.Attributes.Name -notcontains "SettingDefinitionId")
             {
                 $ConfigData.$($property.Name)[0].UniqueId = ('{0} | {1} | {2}' -f "String", "Required", "[Unique ID to identify this specific object]")
             }

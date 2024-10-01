@@ -441,7 +441,7 @@ function New-CompositeResourceModule
 
                 # Check if the resource needs a UniqueId parameter by checking if the names of the properties contain
                 # any of the below property names. If they don't, a UniqueId is required.
-                $propertiesNeedUniqueId = @("Id", "Identity", "IsSingleInstance")
+                $propertiesNeedUniqueId = @("Id", "Identity", "SettingDefinitionId", "IsSingleInstance")
                 $diff = Compare-Object -ReferenceObject $filteredProperties.Name -DifferenceObject $propertiesNeedUniqueId -ExcludeDifferent -IncludeEqual
                 if ($null -eq $diff)
                 {
