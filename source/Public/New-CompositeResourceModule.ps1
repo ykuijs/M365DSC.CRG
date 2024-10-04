@@ -149,6 +149,21 @@ function New-CompositeResourceModule
                         $resourceWorkload = 'AzureAD'
                         $customResourceName = $shortResourceName -replace "^AAD"
                     }
+                    { $_.StartsWith('ADO') }
+                    {
+                        $resourceWorkload = 'AzureDevOps'
+                        $customResourceName = $shortResourceName -replace "^ADO"
+                    }
+                    { $_.StartsWith('Azure') }
+                    {
+                        $resourceWorkload = 'Azure'
+                        $customResourceName = $shortResourceName -replace "^$resourceWorkload"
+                    }
+                    { $_.StartsWith('Defender') }
+                    {
+                        $resourceWorkload = 'Defender'
+                        $customResourceName = $shortResourceName -replace "^$resourceWorkload"
+                    }
                     { $_.StartsWith('EXO') }
                     {
                         $resourceWorkload = 'Exchange'

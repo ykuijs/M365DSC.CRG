@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added the SettingDefinitionId parameter to the mergeable parameters, so that UniqueId
   is not required in those instances.
+- Added support for the new Azure, Azure DevOps and Defender workloads
 
 ## [0.1.19] - 2024-09-18
 
