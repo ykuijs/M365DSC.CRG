@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added support for the new Azure, Azure DevOps and Defender workloads
+- Added support for the new workloads to the AppCredentials parameter
 
 ## [0.1.20] - 2024-10-04
 
