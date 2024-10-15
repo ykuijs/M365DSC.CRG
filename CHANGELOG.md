@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.20] - 2024-10-04
+
 ### Added
 
 - Added the SettingDefinitionId parameter to the mergeable parameters, so that UniqueId
