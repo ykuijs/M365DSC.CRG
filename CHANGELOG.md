@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added support for the new Azure, Azure DevOps and Defender workloads
+
 ## [0.1.20] - 2024-10-04
 
 ### Added
