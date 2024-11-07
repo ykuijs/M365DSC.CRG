@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed an issue where PSCredential objects in an embedded property were
+  not processed correctly, resulting in an empty hashtable in the example
+  data file.
+
 ## [0.1.22] - 2024-10-15
 
 ### Added

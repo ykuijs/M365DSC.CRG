@@ -97,7 +97,15 @@ function Get-AttributeString
                 }
                 else
                 {
-                    Get-AttributeString -Property $embeddedProperty -ConfigData ($ConfigData.$($Property.Name)[0])
+                    if ($embeddedProperty.EmbeddedInstance -eq "MSFT_Credential")
+                    {
+                        $result = ('{0} | {1} | {2}' -f 'PSCredential', $state, $embeddedProperty.Description)
+                        $ConfigData.$($property.Name)[0].$($embeddedProperty.Name) = $result
+                    }
+                    else
+                    {
+                        Get-AttributeString -Property $embeddedProperty -ConfigData ($ConfigData.$($Property.Name)[0])
+                    }
                 }
             }
         }
