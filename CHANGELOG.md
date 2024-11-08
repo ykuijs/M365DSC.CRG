@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.23] - 2024-11-07
+
 ### Fixed
 
 - Fixed an issue where PSCredential objects in an embedded property were
