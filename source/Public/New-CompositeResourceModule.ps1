@@ -427,6 +427,7 @@ function New-CompositeResourceModule
                 [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), '{'))
                 [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), "    `$parameters.Remove('UniqueId')"))
                 [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), '}'))
+                [void]$configString.AppendLine('')
 
                 $script:currentDepth = 0
                 $script:maxDepth = 8
@@ -441,9 +442,17 @@ function New-CompositeResourceModule
                 # Add DependsOn parameter, when necessary.
                 if ($resourceDependencies.ContainsKey($shortResourceName))
                 {
-                    $dependsString = $resourceDependencies.$shortResourceName
+                    $ifStatementString = $resourceDependencies.$shortResourceName.IfStatement
+                    $dependsString = $resourceDependencies.$shortResourceName.DependsOnString
 
+                    [void]$configString.AppendLine(("{0}if ({1})" -f (Get-IndentationString -Indentation $indent), $ifStatementString))
+                    [void]$configString.AppendLine(("{0}{{" -f (Get-IndentationString -Indentation $indent)))
+
+                    $indent++
                     [void]$configString.AppendLine(("{0}{1} = {2}" -f (Get-IndentationString -Indentation $indent), '$parameters.DependsOn', $dependsString))
+                    $indent--
+
+                    [void]$configString.AppendLine(("{0}}}" -f (Get-IndentationString -Indentation $indent)))
                     [void]$configString.AppendLine('')
                 }
 

@@ -5,6 +5,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added possibility to add multiple dependencies.
+- Added dependency on AADGroups and AADUsers for AADConditionalAccessPolicy
+
+### Fixed
+
+- Fixed issue where dependencies were not determined properly when the data did
+  not contain the resource it depended on.
+
 ## [0.1.23] - 2024-11-07
 
 ### Fixed
