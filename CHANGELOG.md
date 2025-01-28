@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.24] - 2025-01-28
+
 ### Added
 
 - Added possibility to add multiple dependencies.
