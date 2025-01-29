@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed incorrect dependency naming for AADConditionalAccessPolicy
+- Fixed incorrect conversion to string instead of array of dependencies
 
 ## [0.1.25] - 2025-01-28
 
