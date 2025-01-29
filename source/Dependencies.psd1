@@ -1,7 +1,7 @@
 @{
     AADConditionalAccessPolicy    = @{
         IfStatement = '$null -ne $ConfigurationData.NonNodeData.AzureAD.Groups -or $null -ne $ConfigurationData.NonNodeData.AzureAD.Users'
-        DependsOnString = '($ConfigurationData.NonNodeData.AzureAD.Groups | Where-Object { $_ } | ForEach-Object { "[AADGroup-{0}-{1}]" -f $_.DisplayName,$_.MailNickName }) + ($ConfigurationData.NonNodeData.AzureAD.Users.UserPrincipalName | Where-Object { $_ } | ForEach-Object { "[AADUser-{0}]" -f $_ })'
+        DependsOnString = '($ConfigurationData.NonNodeData.AzureAD.Groups | Where-Object { $_ } | ForEach-Object { "[AADGroup]AADGroup-{0}-{1}" -f $_.DisplayName,$_.MailNickName }) + ($ConfigurationData.NonNodeData.AzureAD.Users.UserPrincipalName | Where-Object { $_ } | ForEach-Object { "[AADUser]AADUser-{0}" -f $_ })'
     }
     SCAutoSensitivityLabelPolicy  = @{
         IfStatement = '$null -ne $ConfigurationData.NonNodeData.SecurityCompliance.SensitivityLabels'
