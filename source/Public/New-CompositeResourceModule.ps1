@@ -412,6 +412,9 @@ function New-CompositeResourceModule
 
                     # Adding resource title generation
                     [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), $resourceTitle))
+
+                    $replaceCharsString = '$resourceTitle = $resourceTitle -replace "@","_"'
+                    [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), $replaceCharsString))
                     [void]$configString.AppendLine('')
 
                     # Adding parameters hashtable initialization to the code
@@ -450,6 +453,8 @@ function New-CompositeResourceModule
 
                     $indent++
                     [void]$configString.AppendLine(("{0}{1} = {2}" -f (Get-IndentationString -Indentation $indent), '$parameters.DependsOn', $dependsString))
+                    $replaceCharsInDependsOn = '$parameters.DependsOn = $parameters.DependsOn -replace "@","_"'
+                    [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), $replaceCharsInDependsOn))
                     $indent--
 
                     [void]$configString.AppendLine(("{0}}}" -f (Get-IndentationString -Indentation $indent)))

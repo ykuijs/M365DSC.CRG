@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed issue where dependencies contained @-sign, which is not allowed.
+  Replaced these with an underscore.
+
 ## [0.1.26] - 2025-01-29
 
 ### Fixed
