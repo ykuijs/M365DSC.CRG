@@ -40,7 +40,7 @@
         AppCredentials = @(
             @{
                 ApplicationId = 'Guid | Required | The GUID of the Entra ID Service Principal'
-                Workload = 'String | Required | Name of the Workload for which this credential will be used | AzureAD / AzureDevOps / Azure / Defender / Exchange / Fabric / Intune / Office365 / OneDrive / Planner / PowerPlatform / SecurityCompliance / Sentinel / SharePoint / Teams'
+                Workload = 'String | Required | Name of the Workload for which this credential will be used | AzureAD / AzureDevOps / Azure / Commerce / Defender / Exchange / Fabric / Intune / Office365 / OneDrive / Planner / PowerPlatform / SecurityCompliance / Sentinel / SharePoint / Teams'
                 CertThumbprint = 'String | Required | The Certificate Thumbprint of the certificate used for authentication'
             }
         )

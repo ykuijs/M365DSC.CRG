@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added support for new Commerce workload
+
 ### Fixed
 
 - Fixed issue where dependencies contained @-sign, which is not allowed.
