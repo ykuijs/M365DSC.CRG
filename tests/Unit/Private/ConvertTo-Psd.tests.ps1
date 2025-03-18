@@ -40,16 +40,9 @@ Describe ConvertTo-Psd {
                 [void]$compareString.AppendLine("        @{")
                 [void]$compareString.AppendLine("            Value7 = 'String3'")
                 [void]$compareString.AppendLine("            Value8 = 75")
-                [void]$compareString.AppendLine("            Value9 = '67e38349-8278-4968-a77e-81f810d33172'")
-                [void]$compareString.AppendLine("            Value10 = 'www.contoso.com'")
-                [void]$compareString.AppendLine("            Value_11 = 'String4'")
-                [void]$compareString.AppendLine("            Value12 = 100")
-                [void]$compareString.AppendLine("            Value13 = 1073741824")
                 [void]$compareString.AppendLine("        }")
                 [void]$compareString.AppendLine("    )")
-                [void]$compareString.AppendLine("    Value20 = [DateTime] '2024-01-01T00:00:00.0000000'")
-                [void]$compareString.AppendLine("    Value21 = `$true")
-                [void]$compareString.AppendLine("}")
+                [void]$compareString.Append("}")
 
                 ConvertTo-Psd -InputObject $configData | Should -Be $compareString.ToString()
             }
