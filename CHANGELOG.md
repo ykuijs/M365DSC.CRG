@@ -5,12 +5,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.28] - 2025-03-18
-
-### Added
-
-- Added support for new ServicesHub workload
-
 ### Changed
 
 - **BREAKING CHANGE** For objects that can contain multiple items (collections)
@@ -18,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   this is causing several issues/challenges. Reverting back to the full
   name of the M365DSC resource, without the workload prefix. This does
   require users to update their data files to the new names.
+
+## [0.1.28] - 2025-03-18
+
+### Added
+
+- Added support for new ServicesHub workload
 
 ## [0.1.27] - 2025-02-11
 
