@@ -357,33 +357,11 @@ function New-CompositeResourceModule
                     # All other resources can exist multiple times and therefore should loop through an array
                     [void]$configString.AppendLine('')
 
-                    # Generate the plural name of the data node
-                    if ($shortResourceName.EndsWith('y'))
-                    {
-                        $dataName = $customResourceName -replace 'y$', 'ies'
-                    }
-                    elseif ($shortResourceName -like '*Policy*')
-                    {
-                        $dataName = $customResourceName -replace 'Policy', 'Policies'
-                    }
-                    elseif ($shortResourceName -like '*Profile*')
-                    {
-                        $dataName = $customResourceName -replace 'Profile', 'Profiles'
-                    }
-                    elseif ($shortResourceName.EndsWith('Settings'))
-                    {
-                        $dataName = $customResourceName += 'Items'
-                    }
-                    else
-                    {
-                        $dataName = $customResourceName + 's'
-                    }
-
-                    $configData.NonNodeData.$resourceWorkload.$dataName = @(@{})
-                    $currentDataObject = $configData.NonNodeData.$resourceWorkload.$dataName[0]
+                    $configData.NonNodeData.$resourceWorkload.$customResourceName = @(@{})
+                    $currentDataObject = $configData.NonNodeData.$resourceWorkload.$customResourceName[0]
 
                     # Add foreach to loop through the array
-                    [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), "foreach (`$$($customResourceName) in `$ConfigurationData.NonNodeData.$($lastWorkload).$($dataName))"))
+                    [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), "foreach (`$$($customResourceName) in `$ConfigurationData.NonNodeData.$($lastWorkload).$($customResourceName))"))
                     [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), '{'))
                     $indent++
 
