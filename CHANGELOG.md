@@ -19,14 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added support for new ServicesHub workload
 
-### Changed
-
-- **BREAKING CHANGE** For objects that can contain multiple items (collections)
-  this code was changing the resource naming into plural naming. However
-  this is causing several issues/challenges. Reverting back to the full
-  name of the M365DSC resource, without the workload prefix. This does
-  require users to update their data files to the new names.
-
 ## [0.1.27] - 2025-02-11
 
 ### Added
