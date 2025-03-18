@@ -1,5 +1,10 @@
 # M365DSC.CRG
 
+![Build Status](https://img.shields.io/github/actions/workflow/status/ykuijs/M365DSC.CRG/ModuleBuildTestRelease.yml)
+[![PowerShell Gallery (with prereleases)](https://img.shields.io/powershellgallery/v/M365DSC.CRG.svg?include_prereleases&label=M365DSC.CRG%20Preview)](https://www.powershellgallery.com/packages/M365DSC.CRG
+[![PowerShell Gallery](https://img.shields.io/powershellgallery/v/M365DSC.CRG.svg?&label=M365DSC.CRG)](https://www.powershellgallery.com/packages/M365DSC.CRG)
+![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/M365DSC.CRG)
+
 M365DSC CRG = Microsoft365DSC Composite Resource Generator
 
 This module will be able to generate Composite Resources for Microsoft365DSC, which can be used on Microsoft365DSC deployments. These Composite Resources are used in the Microsoft365DSC whitepaper ["Managing Microsoft 365 in true DevOps style with Microsoft365DSC and Azure DevOps"](https://aka.ms/m365dscwhitepaper).
