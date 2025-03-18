@@ -80,7 +80,7 @@ function New-CompositeResourceModule
                 }
                 AppCredentials = @(
                     @{
-                        Workload       = 'String | Required | Name of the Workload for which this credential will be used | AzureAD / AzureDevOps / Azure / Commerce / Defender / Exchange / Fabric / Intune / Office365 / OneDrive / Planner / PowerPlatform / SecurityCompliance / Sentinel / SharePoint / Teams'
+                        Workload       = 'String | Required | Name of the Workload for which this credential will be used | AzureAD / AzureDevOps / Azure / Commerce / Defender / Exchange / Fabric / Intune / Office365 / OneDrive / Planner / PowerPlatform / SecurityCompliance / Sentinel / ServicesHub / SharePoint / Teams'
                         ApplicationId  = 'Guid | Required | The GUID of the Entra ID Service Principal'
                         CertThumbprint = 'String | Required | The Certificate Thumbprint of the certificate used for authentication'
                     }
@@ -213,6 +213,11 @@ function New-CompositeResourceModule
                     {
                         $resourceWorkload = 'Sentinel'
                         $customResourceName = $shortResourceName -replace "^$resourceWorkload"
+                    }
+                    { $_.StartsWith('SH') }
+                    {
+                        $resourceWorkload = 'ServicesHub'
+                        $customResourceName = $shortResourceName -replace '^SH'
                     }
                     { $_.StartsWith('SPO') }
                     {
@@ -357,11 +362,33 @@ function New-CompositeResourceModule
                     # All other resources can exist multiple times and therefore should loop through an array
                     [void]$configString.AppendLine('')
 
-                    $configData.NonNodeData.$resourceWorkload.$customResourceName = @(@{})
-                    $currentDataObject = $configData.NonNodeData.$resourceWorkload.$customResourceName[0]
+                    # Generate the plural name of the data node
+                    if ($shortResourceName.EndsWith('y'))
+                    {
+                        $dataName = $customResourceName -replace 'y$', 'ies'
+                    }
+                    elseif ($shortResourceName -like '*Policy*')
+                    {
+                        $dataName = $customResourceName -replace 'Policy', 'Policies'
+                    }
+                    elseif ($shortResourceName -like '*Profile*')
+                    {
+                        $dataName = $customResourceName -replace 'Profile', 'Profiles'
+                    }
+                    elseif ($shortResourceName.EndsWith('Settings'))
+                    {
+                        $dataName = $customResourceName += 'Items'
+                    }
+                    else
+                    {
+                        $dataName = $customResourceName + 's'
+                    }
+
+                    $configData.NonNodeData.$resourceWorkload.$dataName = @(@{})
+                    $currentDataObject = $configData.NonNodeData.$resourceWorkload.$dataName[0]
 
                     # Add foreach to loop through the array
-                    [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), "foreach (`$$($customResourceName) in `$ConfigurationData.NonNodeData.$($lastWorkload).$($customResourceName))"))
+                    [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), "foreach (`$$($customResourceName) in `$ConfigurationData.NonNodeData.$($lastWorkload).$($dataName))"))
                     [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), '{'))
                     $indent++
 

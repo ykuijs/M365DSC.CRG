@@ -40,12 +40,12 @@
         AppCredentials = @(
             @{
                 ApplicationId = 'Guid | Required | The GUID of the Entra ID Service Principal'
-                Workload = 'String | Required | Name of the Workload for which this credential will be used | AzureAD / AzureDevOps / Azure / Commerce / Defender / Exchange / Fabric / Intune / Office365 / OneDrive / Planner / PowerPlatform / SecurityCompliance / Sentinel / SharePoint / Teams'
+                Workload = 'String | Required | Name of the Workload for which this credential will be used | AzureAD / AzureDevOps / Azure / Commerce / Defender / Exchange / Fabric / Intune / Office365 / OneDrive / Planner / PowerPlatform / SecurityCompliance / Sentinel / ServicesHub / SharePoint / Teams'
                 CertThumbprint = 'String | Required | The Certificate Thumbprint of the certificate used for authentication'
             }
         )
         AzureAD = @{
-            Application = @(
+            Applications = @(
                 @{
                     Owners = @(
                         'String | Optional | UPN or ObjectID values of the app''s owners.'
@@ -82,7 +82,7 @@
             )
         }
         Exchange = @{
-            AcceptedDomain = @(
+            AcceptedDomains = @(
                 @{
                     MatchSubDomains = 'Boolean | Optional | The MatchSubDomains parameter must be false on Authoritative domains. The default value is false.'
                     DomainType = 'String | Optional | The type of AcceptedDomain.  Currently the EXOAcceptedDomain DSC Resource accepts a value of ''Authoritative'' and ''InternalRelay''. | Authoritative / InternalRelay'
@@ -93,7 +93,7 @@
             )
         }
         Intune = @{
-            AntivirusPolicyWindows10SettingCatalog = @(
+            AntivirusPoliciesWindows10SettingCatalog = @(
                 @{
                     scanparameter = 'String | Optional | Selects whether to perform a quick scan or full scan. (1: Quick scan, 2: Full scan) | 1 / 2'
                     allowemailscanning = 'String | Optional | Allows or disallows scanning of email.  (0: disable feature. 1: enable feature) | 0 / 1'
@@ -214,7 +214,7 @@
             }
         }
         Planner = @{
-            Plan = @(
+            Plans = @(
                 @{
                     Title = 'String | Required | The Title of the Planner Plan.'
                     Ensure = 'String | Optional | Present ensures the Plan exists, absent ensures it is removed | Present / Absent'
@@ -243,7 +243,7 @@
             }
         }
         SecurityCompliance = @{
-            AuditConfigurationPolicy = @(
+            AuditConfigurationPolicies = @(
                 @{
                     Ensure = 'String | Optional | Specify if this policy should exist or not. | Present / Absent'
                     UniqueId = 'String | Required | Unique ID to identify this specific object'
