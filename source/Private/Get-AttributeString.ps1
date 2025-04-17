@@ -61,6 +61,7 @@ function Get-AttributeString
 
             foreach ($embeddedProperty in $embeddedSchemas.Attributes)
             {
+                $description = $embeddedProperty.Description -replace "`r`n"
                 if ($null -eq $embeddedProperty.EmbeddedInstance)
                 {
                     $state = 'Optional'
@@ -74,11 +75,11 @@ function Get-AttributeString
                         if ($embeddedProperty.DataType -like "*Array")
                         {
                             $dataType = $embeddedProperty.DataType -replace "Array"
-                            $result = @(('{0} | {1} | {2}' -f $dataType, $state, $embeddedProperty.Description))
+                            $result = @(('{0} | {1} | {2}' -f $dataType, $state, $description))
                         }
                         else
                         {
-                            $result = ('{0} | {1} | {2}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description)
+                            $result = ('{0} | {1} | {2}' -f $embeddedProperty.DataType, $state, $description)
                         }
                     }
                     else
@@ -86,11 +87,11 @@ function Get-AttributeString
                         if ($embeddedProperty.DataType -like "*Array")
                         {
                             $dataType = $embeddedProperty.DataType -replace "Array"
-                            $result = @(('{0} | {1} | {2} | {3}' -f $dataType, $state, $embeddedProperty.Description, ($embeddedProperty.ValueMap -join ' / ')))
+                            $result = @(('{0} | {1} | {2} | {3}' -f $dataType, $state, $description, ($embeddedProperty.ValueMap -join ' / ')))
                         }
                         else
                         {
-                            $result = ('{0} | {1} | {2} | {3}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description, ($embeddedProperty.ValueMap -join ' / '))
+                            $result = ('{0} | {1} | {2} | {3}' -f $embeddedProperty.DataType, $state, $description, ($embeddedProperty.ValueMap -join ' / '))
                         }
                     }
                     $ConfigData.$($property.Name)[0].$($embeddedProperty.Name) = $result
@@ -99,7 +100,7 @@ function Get-AttributeString
                 {
                     if ($embeddedProperty.EmbeddedInstance -eq "MSFT_Credential")
                     {
-                        $result = ('{0} | {1} | {2}' -f 'PSCredential', $state, $embeddedProperty.Description)
+                        $result = ('{0} | {1} | {2}' -f 'PSCredential', $state, $description)
                         $ConfigData.$($property.Name)[0].$($embeddedProperty.Name) = $result
                     }
                     else
@@ -115,6 +116,7 @@ function Get-AttributeString
 
             foreach ($embeddedProperty in $embeddedSchemas.Attributes)
             {
+                $description = $embeddedProperty.Description -replace "`r`n"
                 if ($null -eq $embeddedProperty.EmbeddedInstance)
                 {
                     $state = 'Optional'
@@ -128,11 +130,11 @@ function Get-AttributeString
                         if ($embeddedProperty.DataType -like "*Array")
                         {
                             $dataType = $embeddedProperty.DataType -replace "Array"
-                            $result = @(('{0} | {1} | {2}' -f $dataType, $state, $embeddedProperty.Description))
+                            $result = @(('{0} | {1} | {2}' -f $dataType, $state, $description))
                         }
                         else
                         {
-                            $result = ('{0} | {1} | {2}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description)
+                            $result = ('{0} | {1} | {2}' -f $embeddedProperty.DataType, $state, $description)
                         }
                     }
                     else
@@ -140,11 +142,11 @@ function Get-AttributeString
                         if ($embeddedProperty.DataType -like "*Array")
                         {
                             $dataType = $embeddedProperty.DataType -replace "Array"
-                            $result = @(('{0} | {1} | {2} | {3}' -f $dataType, $state, $embeddedProperty.Description, ($embeddedProperty.ValueMap -join ' / ')))
+                            $result = @(('{0} | {1} | {2} | {3}' -f $dataType, $state, $description, ($embeddedProperty.ValueMap -join ' / ')))
                         }
                         else
                         {
-                            $result = ('{0} | {1} | {2} | {3}' -f $embeddedProperty.DataType, $state, $embeddedProperty.Description, ($embeddedProperty.ValueMap -join ' / '))
+                            $result = ('{0} | {1} | {2} | {3}' -f $embeddedProperty.DataType, $state, $description, ($embeddedProperty.ValueMap -join ' / '))
                         }
                     }
                     $ConfigData.$($property.Name).$($embeddedProperty.Name) = $result

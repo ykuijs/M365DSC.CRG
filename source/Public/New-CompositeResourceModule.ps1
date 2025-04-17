@@ -480,6 +480,7 @@ function New-CompositeResourceModule
                         {
                             # For all other parameter, generate the correct parameter value name from the Configuration Data
                             $propertyDataType = $property.DataType
+                            $description = $property.Description -replace "`r`n", ' '
 
                             if ($propertyDataType -eq 'Instance' -and $property.EmbeddedInstance -eq 'MSFT_Credential')
                             {
@@ -497,11 +498,11 @@ function New-CompositeResourceModule
                                 if ($propertyDataType -like "*Array")
                                 {
                                     $propertyDataType = $propertyDataType -replace "Array"
-                                    $result = @(('{0} | {1} | {2}' -f $propertyDataType, $state, $property.Description))
+                                    $result = @(('{0} | {1} | {2}' -f $propertyDataType, $state, $description))
                                 }
                                 else
                                 {
-                                    $result = ('{0} | {1} | {2}' -f $propertyDataType, $state, $property.Description)
+                                    $result = ('{0} | {1} | {2}' -f $propertyDataType, $state, $description)
                                 }
                             }
                             else
@@ -509,11 +510,11 @@ function New-CompositeResourceModule
                                 if ($propertyDataType -like "*Array")
                                 {
                                     $propertyDataType = $propertyDataType -replace "Array"
-                                    $result = @(('{0} | {1} | {2} | {3}' -f $propertyDataType, $state, $property.Description, ($property.ValueMap -join ' / ')))
+                                    $result = @(('{0} | {1} | {2} | {3}' -f $propertyDataType, $state, $description, ($property.ValueMap -join ' / ')))
                                 }
                                 else
                                 {
-                                    $result = ('{0} | {1} | {2} | {3}' -f $propertyDataType, $state, $property.Description, ($property.ValueMap -join ' / '))
+                                    $result = ('{0} | {1} | {2} | {3}' -f $propertyDataType, $state, $description, ($property.ValueMap -join ' / '))
                                 }
                             }
                             $currentDataObject.$($property.Name) = $result

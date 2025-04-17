@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed issue where descriptions in the resource schema contains CRLF, which
+  caused issues in the data file. These characters are now stripped.
+
 ## [0.2.0] - 2025-04-02
 
 ### Changed
