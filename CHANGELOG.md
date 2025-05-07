@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Replacing additional characters in resource title and DependsOn generation.
+  Fixes [https://github.com/ykuijs/M365DSC_CICD/issues/3](https://github.com/ykuijs/M365DSC_CICD/issues/3)
+
 ## [0.2.1] - 2025-04-17
 
 ### Fixed
