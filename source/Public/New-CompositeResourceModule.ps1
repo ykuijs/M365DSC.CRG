@@ -80,7 +80,7 @@ function New-CompositeResourceModule
                 }
                 AppCredentials = @(
                     @{
-                        Workload       = 'String | Required | Name of the Workload for which this credential will be used | AzureAD / AzureDevOps / Azure / Commerce / Defender / Exchange / Fabric / Intune / Office365 / OneDrive / Planner / PowerPlatform / SecurityCompliance / Sentinel / ServicesHub / SharePoint / Teams'
+                        Workload       = 'String | Required | Name of the Workload for which this credential will be used | AzureAD / AzureDevOps / Azure / Commerce / Defender / Exchange / Fabric / Intune / Office365 / OneDrive / Planner / PowerPlatform / SecurityCompliance / Sentinel / ServicesHub / SharePoint / Teams / Viva'
                         ApplicationId  = 'Guid | Required | The GUID of the Entra ID Service Principal'
                         CertThumbprint = 'String | Required | The Certificate Thumbprint of the certificate used for authentication'
                     }
@@ -227,6 +227,11 @@ function New-CompositeResourceModule
                     { $_.StartsWith('Teams') }
                     {
                         $resourceWorkload = 'Teams'
+                        $customResourceName = $shortResourceName -replace "^$resourceWorkload"
+                    }
+                    { $_.StartsWith('Viva') }
+                    {
+                        $resourceWorkload = 'Viva'
                         $customResourceName = $shortResourceName -replace "^$resourceWorkload"
                     }
                     { $_.StartsWith('M365DSC') }
