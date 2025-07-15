@@ -406,7 +406,7 @@ function New-CompositeResourceModule
                     # Adding resource title generation
                     [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), $resourceTitle))
 
-                    $replaceCharsString = '$resourceTitle = $resourceTitle -replace "@","_" -replace "/","_" -replace ":","_"'
+                    $replaceCharsString = '$resourceTitle = $resourceTitle -replace "[^a-zA-Z0-9_\-\.\\]","_" -replace "__","_" -replace "__","_"'
                     [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), $replaceCharsString))
                     [void]$configString.AppendLine('')
 
@@ -446,7 +446,7 @@ function New-CompositeResourceModule
 
                     $indent++
                     [void]$configString.AppendLine(("{0}{1} = {2}" -f (Get-IndentationString -Indentation $indent), '$parameters.DependsOn', $dependsString))
-                    $replaceCharsInDependsOn = '$parameters.DependsOn = $parameters.DependsOn -replace "@","_" -replace "/","_" -replace ":","_"'
+                    $replaceCharsInDependsOn = '$parameters.DependsOn = $parameters.DependsOn -replace "[^a-zA-Z0-9_\-\.\\]","_" -replace "__","_" -replace "__","_"'
                     [void]$configString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $indent), $replaceCharsInDependsOn))
                     $indent--
 
