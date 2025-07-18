@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed issue with updated regex in name generation
+
 ## [0.2.4] - 2025-07-15
 
 ### Fixed
