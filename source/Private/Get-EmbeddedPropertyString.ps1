@@ -69,7 +69,19 @@ function Get-EmbeddedPropertyString
                     [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), '{'))
                     $Indentation++
 
-                    [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), "$ParameterName.$propertyName = $ParameterName.$propertyName | ForEach-Object {"))
+                    # Check if this is an array property using the IsArray property from MOF parser
+                    $isArray = $Property.IsArray -eq $true
+
+                    if ($isArray)
+                    {
+                        # Wrap in @() to ensure it remains an array even with single items
+                        [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), "$ParameterName.$propertyName = @($ParameterName.$propertyName | ForEach-Object {"))
+                    }
+                    else
+                    {
+                        # Single instance - no array wrapping
+                        [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), "$ParameterName.$propertyName = $ParameterName.$propertyName | ForEach-Object {"))
+                    }
                     $Indentation++
 
                     $result = Get-EmbeddedPropertyString -Properties $embeddedSchema.Attributes -Indentation $Indentation -ParameterName "`$_"
@@ -87,7 +99,14 @@ function Get-EmbeddedPropertyString
                     [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), "(Get-DscSplattedResource -ResourceName '$($Property.EmbeddedInstance)' -Properties `$_ -NoInvoke).Invoke(`$_)"))
 
                     $Indentation--
-                    [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), '}'))
+                    if ($isArray)
+                    {
+                        [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), '})'))
+                    }
+                    else
+                    {
+                        [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), '}'))
+                    }
 
                     $Indentation--
                     [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), '}'))
