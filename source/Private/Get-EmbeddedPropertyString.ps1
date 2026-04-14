@@ -84,8 +84,24 @@ function Get-EmbeddedPropertyString
                     [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), '}'))
                     [void]$propertyString.AppendLine('')
 
+                    # if $_.Count -eq 0, the property is NULL and we should not invoke the embedded resource, otherwise it will throw an error.
+                    # This can be caused by the level of maxDepth being reached, but it can also be caused by the user explicitly setting the property to $null in the configuration.
+                    [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), "if (`$_.Count -gt 0)"))
+                    [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), '{'))
+                    $Indentation++
                     [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), "(Get-DscSplattedResource -ResourceName '$($Property.EmbeddedInstance)' -Properties `$_ -NoInvoke).Invoke(`$_)"))
+                    $Indentation--
+                    [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), '}'))
 
+                    $Indentation--
+                    [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), '}'))
+                    [void]$propertyString.AppendLine('')
+
+                    ## if property is NULL, remove property from the hashtable to prevent errors in the composite resource
+                    [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), "if ($ParameterName.$propertyName.Count -eq 0)"))
+                    [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), '{'))
+                    $Indentation++
+                    [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), "$ParameterName.Remove('$propertyName')"))
                     $Indentation--
                     [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), '}'))
 
