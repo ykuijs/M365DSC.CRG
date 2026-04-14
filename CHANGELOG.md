@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Empty array issue not yet fully fixed. Now specifically checking for empty array and
+  removing the data when that is the case.
+
 ## [0.2.6] - 2026-02-20
 
 ### Fixed
