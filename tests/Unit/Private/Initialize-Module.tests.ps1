@@ -18,6 +18,10 @@ Describe Initialize-Module {
                 Mock -CommandName Set-Content -MockWith { }
 
                 Initialize-Module -Version '1.23.1101.1' -OutputPath 'C:\Temp' | Should -Invoke 'Set-Content'
+                Should -Invoke -CommandName Set-Content -Times 1 -Exactly -ParameterFilter {
+                    $Value -match "PowerShellVersion\s*=\s*'5.1'" -and
+                    $Value -match "RequiredVersion='1.23.1101.1'"
+                }
             }
         }
     }

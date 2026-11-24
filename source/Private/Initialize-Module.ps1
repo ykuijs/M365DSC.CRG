@@ -96,7 +96,7 @@ function Initialize-Module
         [void]$moduleManifestString.AppendLine("    Description          = 'DSC composite resource for configuring Microsoft 365'")
         [void]$moduleManifestString.AppendLine('')
         [void]$moduleManifestString.AppendLine('    # Minimum version of the Windows PowerShell engine required by this module')
-        [void]$moduleManifestString.AppendLine("    PowerShellVersion    = '5.0'")
+        [void]$moduleManifestString.AppendLine("    PowerShellVersion    = '5.1'")
         [void]$moduleManifestString.AppendLine('')
         [void]$moduleManifestString.AppendLine('    # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.')
         [void]$moduleManifestString.AppendLine('    PrivateData          = @{')

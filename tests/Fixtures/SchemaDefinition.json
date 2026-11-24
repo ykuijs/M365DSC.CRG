@@ -1,0 +1,37 @@
+[
+  {
+    "ClassName": "MSFT_TeamsTest",
+    "Parameters": [
+      { "Name": "Identity", "CIMType": "String", "Option": "Key", "Description": "Identity", "ValueMap": ["Global"], "Values": ["Global"] },
+      { "Name": "CertificateThumbprint", "CIMType": "String", "Option": "Write", "Description": "Certificate" }
+    ]
+  },
+  {
+    "ClassName": "MSFT_Child",
+    "Parameters": [
+      { "Name": "Name", "CIMType": "String", "Option": "Required", "Description": "Child name", "ValueMap": ["One", "Two"], "Values": ["One", "Two"] },
+      { "Name": "Enabled", "CIMType": "Boolean", "Option": "Write", "Description": "Enabled" },
+      { "Name": "Numbers", "CIMType": "UInt32[]", "Option": "Write", "Description": "Numbers" },
+      { "Name": "Credential", "CIMType": "MSFT_Credential", "Option": "Required", "Description": "Child credential" },
+      { "Name": "Nested", "CIMType": "MSFT_Leaf", "Option": "Write", "Description": "Nested value" }
+    ]
+  },
+  {
+    "ClassName": "MSFT_AADTest",
+    "Parameters": [
+      { "Name": "Id", "CIMType": "String", "Option": "Key", "Description": "Identifier" },
+      { "Name": "Names", "CIMType": "String[]", "Option": "Write", "Description": "Names" },
+      { "Name": "Children", "CIMType": "MSFT_Child[]", "Option": "Write", "Description": "Children" },
+      { "Name": "Child", "CIMType": "MSFT_Child", "Option": "Write", "Description": "Child" },
+      { "Name": "Credential", "CIMType": "MSFT_Credential", "Option": "Write", "Description": "Credential" },
+      { "Name": "Credentials", "CIMType": "MSFT_Credential[]", "Option": "Write", "Description": "Credentials" },
+      { "Name": "CertificateThumbprint", "CIMType": "String", "Option": "Write", "Description": "Certificate" }
+    ]
+  },
+  {
+    "ClassName": "MSFT_Leaf",
+    "Parameters": [
+      { "Name": "Value", "CIMType": "SInt32", "Option": "Write", "Description": "Leaf value" }
+    ]
+  }
+]

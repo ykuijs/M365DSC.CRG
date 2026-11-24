@@ -8,10 +8,13 @@ function Get-EmbeddedPropertyString
         This function loops through all the provided properties and adds references to them to the generated composite resource.
 
         .Example
-        $result = Get-EmbeddedPropertyString -Properties $embeddedSchema.Attributes -Indentation $Indentation -ParameterName "`$_"
+        $result = Get-EmbeddedPropertyString -Properties $embeddedSchema.Attributes -Schemas $schemas -Indentation $Indentation -ParameterName "`$_"
 
         .Parameter Properties
-        The Properties parameter are the properties from the MOF schema that needs to be added to the composite resource.
+        The Properties parameter contains the normalized properties to add to the composite resource.
+
+        .Parameter Schemas
+        Specifies the lookup containing all resource and complex-type definitions.
 
         .Parameter Indentation
         The Indentation parameter is number of indentations that should be used for the generated code.
@@ -26,6 +29,10 @@ function Get-EmbeddedPropertyString
         [Parameter(Mandatory = $true)]
         [System.Object]
         $Properties,
+
+        [Parameter(Mandatory = $true)]
+        [System.Collections.Hashtable]
+        $Schemas,
 
         [Parameter(Mandatory = $true)]
         [System.Int32]
@@ -57,10 +64,7 @@ function Get-EmbeddedPropertyString
             foreach ($Property in $embeddedProperties)
             {
                 Write-Verbose "$($Property.Name) - $($Property.EmbeddedInstance)"
-                $embeddedSchema = $mofSchemas |
-                    Where-Object -FilterScript {
-                            ($_.ClassName -eq $Property.EmbeddedInstance)
-                    }
+                $embeddedSchema = $Schemas[$Property.EmbeddedInstance]
 
                 if ($null -ne $embeddedSchema)
                 {
@@ -69,10 +73,10 @@ function Get-EmbeddedPropertyString
                     [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), '{'))
                     $Indentation++
 
-                    [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), "$ParameterName.$propertyName = $ParameterName.$propertyName | ForEach-Object {"))
+                    [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), "$ParameterName.$propertyName = $ParameterName.$propertyName | Where-Object { `$null -ne `$_ } | ForEach-Object {"))
                     $Indentation++
 
-                    $result = Get-EmbeddedPropertyString -Properties $embeddedSchema.Attributes -Indentation $Indentation -ParameterName "`$_"
+                    $result = Get-EmbeddedPropertyString -Properties $embeddedSchema.Attributes -Schemas $Schemas -Indentation $Indentation -ParameterName "`$_"
                     if ([String]::IsNullOrEmpty($result) -eq $false)
                     {
                         [void]$propertyString.Append($result)
@@ -98,7 +102,7 @@ function Get-EmbeddedPropertyString
                     [void]$propertyString.AppendLine('')
 
                     ## if property is NULL, remove property from the hashtable to prevent errors in the composite resource
-                    [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), "if ($ParameterName.$propertyName.Count -eq 0)"))
+                    [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), "if (`$null -eq $ParameterName.$propertyName -or @($ParameterName.$propertyName).Count -eq 0)"))
                     [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), '{'))
                     $Indentation++
                     [void]$propertyString.AppendLine(('{0}{1}' -f (Get-IndentationString -Indentation $Indentation), "$ParameterName.Remove('$propertyName')"))

@@ -6,16 +6,18 @@ function New-CompositeResourceModule
 
         .Description
         This function generates a new module with composite resources for Microsoft365DSC, split into workloads.
+        Resource metadata is read from SchemaDefinition.json in the selected installed module.
+        MOF-only Microsoft365DSC releases are not supported.
 
         .Example
-        New-CompositeResourceModule -OutputPath 'C:\Temp' -Version '11.23.1122.100'
+        New-CompositeResourceModule -OutputPath 'C:\Temp' -Version '2.26.1007.100'
 
         .Parameter OutputPath
         Specifies the path in which the new module should be generated.
 
         .Parameter Version
         Specifies the version of the new module should be generated. This should be related to the version of Microsoft365DSC.
-        E.g. Version is 1.23.1122.100 when the Microsoft365DSC version is 1.23.1122.1
+        E.g. Version is 2.26.1007.100 when the Microsoft365DSC version is 2.26.1007.1
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification="Using Write-Host to format output")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "", Justification="Not changing state")]
@@ -105,41 +107,43 @@ function New-CompositeResourceModule
                 $m365Module = $m365Module | Select-Object -First 1
             }
 
-            # Initialize the module
-            Initialize-Module -Version $Version -OutputPath $OutputPath
+            $schemas = Get-ResourceSchema -ModulePath $m365Module.ModuleBase
+            $resourceSchemas = @($schemas.Values |
+                Where-Object { $null -ne $_.FriendlyName } |
+                Sort-Object -Property { $_.FriendlyName })
 
-            # Get the module root path and find all schema.mof files in the module
-            $m365modulePath = Split-Path -Path $m365Module.Path -Parent
-            $mofSearchPath = Join-Path -Path $m365modulePath -ChildPath '\**\**.schema.mof'
-            $mofSchemaFiles = @(Get-ChildItem -Path $mofSearchPath -Recurse)
+            Write-Host -Object ("Found {0} resources in path '{1}'." -f $resourceSchemas.Count, $m365Module.ModuleBase) -ForegroundColor Cyan
 
-            Write-Host -Object ("Found {0} MOF files in path '{1}'." -f $mofSchemaFiles.Count, $m365modulePath) -ForegroundColor Cyan
-
-            if ($mofSchemaFiles.Count -eq 0)
+            $supportedResources = @($resourceSchemas | Where-Object {
+                $_.FriendlyName -notlike 'M365DSC*' -and 'CertificateThumbprint' -in $_.Attributes.Name
+            })
+            if ($supportedResources.Count -eq 0)
             {
-                return $false
+                throw 'No supported resources with CertificateThumbprint authentication were found.'
             }
+
+            Initialize-Module -Version $Version -OutputPath $OutputPath
 
             Write-Host -Object ' '
             Write-Host -Object 'Processing resources:' -ForegroundColor Cyan
 
             $lastWorkload = ''
 
-            # Loop through all the Schema files found in the modules folder
-            :schemaloop foreach ($mofSchemaFile in $mofSchemaFiles)
+            :schemaloop foreach ($resourceSchema in $resourceSchemas)
             {
-                # Read schema
-                $mofSchemas = Get-MofSchemaObject -FileName $mofSchemaFile.FullName
-                $dscResourceName = $mofSchemaFile.Name.Replace('.schema.mof', '')
-                $shortResourceName = $dscResourceName -replace '^MSFT_'
+                $shortResourceName = $resourceSchema.FriendlyName
 
                 Write-Host -Object "  - $shortResourceName" -ForegroundColor Green
 
-                # Geth the main CIM class of the resource
-                $resourceSchema = $mofSchemas |
-                    Where-Object -FilterScript {
-                            ($_.ClassName -eq $dscResourceName) -and ($null -ne $_.FriendlyName)
+                if ('CertificateThumbprint' -notin $resourceSchema.Attributes.Name -and $shortResourceName -notlike 'M365DSC*')
+                {
+                    Write-Host '    Resource does not support CertificateThumbprint authentication. Skipping resource for now!' -ForegroundColor Red
+                    $script:errors += [PSCustomObject]@{
+                        Type = 'Warning'
+                        Message = "Resource '$shortResourceName' does not support CertificateThumbprint authentication. Resource has been skipped!"
                     }
+                    continue schemaloop
+                }
 
                 # Determine which workload the current resource is in
                 switch ($shortResourceName)
@@ -241,12 +245,7 @@ function New-CompositeResourceModule
                     }
                     Default
                     {
-                        Write-Error 'Unknown workload for this resource!'
-                        $script:errors += [PSCustomObject]@{
-                            Type = 'Error'
-                            Message = "Unknown workload for resource '$shortResourceName'"
-                        }
-                        continue
+                        throw "Unknown workload for resource '$shortResourceName'."
                     }
                 }
 
@@ -291,7 +290,7 @@ function New-CompositeResourceModule
                     [void]$configString.AppendLine('        $CertificateThumbprint')
                     [void]$configString.AppendLine('    )')
                     [void]$configString.AppendLine('')
-                    [void]$configString.AppendLine('    Import-DscResource -ModuleName Microsoft365DSC')
+                    [void]$configString.AppendLine("    Import-DscResource -ModuleName Microsoft365DSC -ModuleVersion '$m365dscVersion'")
                 }
 
                 $identityGlobalResource = $false
@@ -299,17 +298,6 @@ function New-CompositeResourceModule
 
                 # Generate Configuration Data location of the settings
                 $configDataLocation = '$ConfigurationData.NonNodeData.{0}.{1}' -f $lastWorkload, $customResourceName
-
-                # Checking for missing CertificateThumbprint parameter and skip resource if it is (TeamsUserCallingSettings resource)
-                if (($resourceSchema.Attributes | Where-Object -FilterScript { $_.Name -eq 'CertificateThumbprint' }) -isnot [System.Collections.Hashtable])
-                {
-                    Write-Host '    Resource does not support CertificateThumbprint authentication. Skipping resource for now!' -ForegroundColor Red
-                    $script:errors += [PSCustomObject]@{
-                        Type = 'Warning'
-                        Message = "Resource '$shortResourceName' does not support CertificateThumbprint authentication. Resource has been skipped!"
-                    }
-                    continue
-                }
 
                 # Check if the current DSC resource is a SingleInstance resource
                 if (($resourceSchema.Attributes | Where-Object -FilterScript { $_.Name -eq 'IsSingleInstance' }) -is [System.Collections.Hashtable])
@@ -429,7 +417,7 @@ function New-CompositeResourceModule
                 $script:maxDepth = 8
 
                 # Process all parameters, but handle embedded parameters separately
-                $result = Get-EmbeddedPropertyString -Properties $resourceSchema.Attributes -Indentation $indent -ParameterName '$parameters'
+                $result = Get-EmbeddedPropertyString -Properties $resourceSchema.Attributes -Schemas $schemas -Indentation $indent -ParameterName '$parameters'
                 if ([String]::IsNullOrEmpty($result) -eq $false)
                 {
                     [void]$configString.Append($result)
@@ -476,7 +464,7 @@ function New-CompositeResourceModule
                     # Check if the property is an EmbeddedInstance
                     if ($null -ne $property.EmbeddedInstance -and $property.EmbeddedInstance -ne 'MSFT_Credential')
                     {
-                        $null = Get-AttributeString -Property $property -ConfigData $currentDataObject
+                        $null = Get-AttributeString -Property $property -Schemas $schemas -ConfigData $currentDataObject
                     }
                     else
                     {
@@ -487,9 +475,13 @@ function New-CompositeResourceModule
                             $propertyDataType = $property.DataType
                             $description = $property.Description -replace "`r`n", ' '
 
-                            if ($propertyDataType -eq 'Instance' -and $property.EmbeddedInstance -eq 'MSFT_Credential')
+                            if ($property.EmbeddedInstance -eq 'MSFT_Credential')
                             {
                                 $propertyDataType = 'PSCredential'
+                                if ($property.IsArray)
+                                {
+                                    $propertyDataType += 'Array'
+                                }
                             }
 
                             $state = 'Optional'

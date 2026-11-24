@@ -13,7 +13,7 @@ Describe Get-AttributeString {
     Context 'When calling the function with string value' {
         It 'Should populate ConfigData with properties' {
             InModuleScope -ModuleName $dscModuleName {
-                $mofSchemas = @(
+                $definitions = @(
                     @{
                         ClassName = 'MSFT_CRG_WebApp'
                         Attributes = @(
@@ -56,7 +56,12 @@ Describe Get-AttributeString {
                 $script:maxDepth = 5
                 $configData = @{}
 
-                Get-AttributeString -Property $property -ConfigData $configData
+                $schemas = @{}
+                foreach ($definition in $definitions)
+                {
+                    $schemas[$definition.ClassName] = $definition
+                }
+                Get-AttributeString -Property $property -Schemas $schemas -ConfigData $configData
 
                 $configData.Input | Should -Not -Be $null
             }
@@ -64,7 +69,7 @@ Describe Get-AttributeString {
 
         It 'Should populate ConfigData with one property, including subclasses' {
             InModuleScope -ModuleName $dscModuleName {
-                $mofSchemas = @(
+                $definitions = @(
                     @{
                         ClassName = 'MSFT_CRG_WebApp'
                         Attributes = @(
@@ -107,7 +112,12 @@ Describe Get-AttributeString {
                 $script:maxDepth = 5
                 $configData = @{}
 
-                Get-AttributeString -Property $property -ConfigData $configData
+                $schemas = @{}
+                foreach ($definition in $definitions)
+                {
+                    $schemas[$definition.ClassName] = $definition
+                }
+                Get-AttributeString -Property $property -Schemas $schemas -ConfigData $configData
 
                 $configData.Input | Should -Not -Be $null
             }

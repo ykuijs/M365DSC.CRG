@@ -8,6 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated GitHub Actions to more recent and supported versions
+- **BREAKING CHANGE** Discover Microsoft365DSC resources and complex types from
+  `SchemaDefinition.json` and the module manifest instead of MOF schemas. MOF-only
+  releases are no longer supported.
+- Require Windows PowerShell 5.1 in the generator and generated module manifests.
+
+### Added
+
+- Validate resource metadata before initializing output, including type references,
+  exported resource definitions, property types, and duplicate names.
+- Add JSON schema tests and opt-in class-resource configuration compilation tests.
+
+### Fixed
+
+- Group resources deterministically so a workload is not overwritten when schema
+  metadata is unordered.
+- Remove null and empty complex-property values without invoking embedded resources.
 
 ## [0.2.7] - 2026-04-14
 

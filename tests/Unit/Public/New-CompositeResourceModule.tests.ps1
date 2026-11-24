@@ -97,79 +97,19 @@ Describe New-CompositeResourceModule {
     Context 'Function succeeds, module is created correctly' {
         BeforeAll {
             Mock -CommandName Test-Path -MockWith { return $true } -ModuleName $dscModuleName
-            Mock -CommandName Get-Module -MockWith { return @(@{Name = 'Microsoft365DSC';Version = $testM365DSCVersion;Path = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testM365DSCVersion"}) } -ModuleName $dscModuleName
+            Mock -CommandName Get-Module -MockWith { return @(@{Name = 'Microsoft365DSC';Version = $testM365DSCVersion;ModuleBase = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testM365DSCVersion"}) } -ModuleName $dscModuleName
             Mock -CommandName Initialize-Module -MockWith {} -ModuleName $dscModuleName
-            Mock -CommandName Get-ChildItem -MockWith {
-                return @(
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_AADApplication\MSFT_AADApplication.schema.mof";Name = 'MSFT_AADApplication.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_EXOAcceptedDomain\MSFT_EXOAcceptedDomain.schema.mof";Name = 'MSFT_EXOAcceptedDomain.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_IntuneAntivirusPolicyWindows10SettingCatalog\MSFT_IntuneAntivirusPolicyWindows10SettingCatalog.schema.mof";Name = 'MSFT_IntuneAntivirusPolicyWindows10SettingCatalog.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_O365AdminAuditLogConfig\MSFT_O365AdminAuditLogConfig.schema.mof";Name = 'MSFT_O365AdminAuditLogConfig.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_ODSettings\MSFT_ODSettings.schema.mof";Name = 'MSFT_ODSettings.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_PlannerPlan\MSFT_PlannerPlan.schema.mof";Name = 'MSFT_PlannerPlan.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_PPTenantSettings\MSFT_PPTenantSettings.schema.mof";Name = 'MSFT_PPTenantSettings.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_SCAuditConfigurationPolicy\MSFT_SCAuditConfigurationPolicy.schema.mof";Name = 'MSFT_SCAuditConfigurationPolicy.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_SPOTenantSettings\MSFT_SPOTenantSettings.schema.mof";Name = 'MSFT_SPOTenantSettings.schema.mof' }
-                    @{FullName = "C:\Program Files\WindowsPowerShell\Modules\Microsoft365DSC\$testVersion\DSCResources\MSFT_TeamsClientConfiguration\MSFT_TeamsClientConfiguration.schema.mof";Name = 'MSFT_TeamsClientConfiguration.schema.mof' }
-                ) } -ModuleName $dscModuleName
-            Mock -CommandName Get-MofSchemaObject -MockWith {
-                $allMofSchemas = . $PSScriptRoot\MofSchemas.ps1
-
-                $shortName = Split-Path -Path $FileName -Leaf
-                switch ($shortName)
+            Mock -CommandName Get-ResourceSchema -MockWith {
+                $fixtures = . $PSScriptRoot\ResourceSchemas.ps1
+                $schemas = @{}
+                foreach ($definitions in $fixtures.Values)
                 {
-                    { $_.StartsWith('MSFT_AAD') }
+                    foreach ($definition in $definitions)
                     {
-                        $returnVal = $allMofSchemas.MSFT_AAD
-                        continue
-                    }
-                    { $_.StartsWith('MSFT_EXO') }
-                    {
-                        $returnVal = $allMofSchemas.MSFT_EXO
-                        continue
-                    }
-                    { $_.StartsWith('MSFT_Intune') }
-                    {
-                        $returnVal = $allMofSchemas.MSFT_Intune
-                        continue
-                    }
-                    { $_.StartsWith('MSFT_O365') }
-                    {
-                        $returnVal = $allMofSchemas.MSFT_O365
-                        continue
-                    }
-                    { $_.StartsWith('MSFT_OD') }
-                    {
-                        $returnVal = $allMofSchemas.MSFT_OD
-                        continue
-                    }
-                    { $_.StartsWith('MSFT_Planner') }
-                    {
-                        $returnVal = $allMofSchemas.MSFT_Planner
-                        continue
-                    }
-                    { $_.StartsWith('MSFT_PP') }
-                    {
-                        $returnVal = $allMofSchemas.MSFT_PP
-                        continue
-                    }
-                    { $_.StartsWith('MSFT_SC') }
-                    {
-                        $returnVal = $allMofSchemas.MSFT_SC
-                        continue
-                    }
-                    { $_.StartsWith('MSFT_SPO') }
-                    {
-                        $returnVal = $allMofSchemas.MSFT_SPO
-                        continue
-                    }
-                    { $_.StartsWith('MSFT_Teams') }
-                    {
-                        $returnVal = $allMofSchemas.MSFT_Teams
-                        continue
+                        $schemas[$definition.ClassName] = $definition
                     }
                 }
-                return $returnVal
+                return $schemas
             } -ModuleName $dscModuleName
             Mock -CommandName Save-Resource -MockWith {} -ModuleName $dscModuleName
             Mock -CommandName Set-Content -MockWith {
@@ -182,11 +122,53 @@ Describe New-CompositeResourceModule {
             New-CompositeResourceModule -OutputPath 'C:\Temp' -Version $testVersion | Should -Be $true
             Should -Invoke -CommandName Save-Resource -Times 10 -ModuleName $dscModuleName
             Should -Invoke -CommandName Set-Content -Times 1 -ModuleName $dscModuleName
+            Should -Invoke -CommandName Save-Resource -Times 10 -Exactly -ModuleName $dscModuleName -ParameterFilter {
+                $Config -match "Import-DscResource -ModuleName Microsoft365DSC -ModuleVersion '1.23.1108.1'"
+            }
 
             $content = Get-Content -Path "$PSScriptRoot\PsdTemplate.psd1" -Raw
             $sb = [Scriptblock]::Create($content)
             $psdTargetContent = $sb.InvokeReturnAsIs()
             Test-Equality -a $psdContent -b $psdTargetContent | Should -Be $true
+        }
+
+        It 'Should stop before initializing output when metadata cannot be read' {
+            Mock -CommandName Get-ResourceSchema -MockWith { throw 'Invalid resource metadata' } -ModuleName $dscModuleName
+
+            { New-CompositeResourceModule -OutputPath 'C:\Temp' -Version $testVersion } | Should -Throw '*Invalid resource metadata*'
+            Should -Invoke -CommandName Initialize-Module -Times 0 -Exactly -ModuleName $dscModuleName
+        }
+
+        It 'Should group unordered resources and exclude complex types and unsupported resources' {
+            Mock -CommandName Get-ResourceSchema -MockWith {
+                $attributes = @(
+                    @{ Name = 'Id'; State = 'Key'; DataType = 'String'; IsArray = $false }
+                    @{ Name = 'CertificateThumbprint'; State = 'Write'; DataType = 'String'; IsArray = $false }
+                )
+                @{
+                    MSFT_AADLast = @{ FriendlyName = 'AADLast'; Attributes = $attributes }
+                    MSFT_TeamsTest = @{ FriendlyName = 'TeamsTest'; Attributes = $attributes }
+                    MSFT_AADFirst = @{ FriendlyName = 'AADFirst'; Attributes = $attributes }
+                    MSFT_Complex = @{ FriendlyName = $null; Attributes = $attributes }
+                    MSFT_AADUnsupported = @{ FriendlyName = 'AADUnsupported'; Attributes = @(@{ Name = 'Id'; State = 'Key' }) }
+                    MSFT_M365DSCRuleEvaluation = @{ FriendlyName = 'M365DSCRuleEvaluation'; Attributes = $attributes }
+                }
+            } -ModuleName $dscModuleName
+
+            New-CompositeResourceModule -OutputPath 'C:\Temp' -Version $testVersion | Should -BeTrue
+            Should -Invoke -CommandName Save-Resource -Times 2 -Exactly -ModuleName $dscModuleName
+            Should -Invoke -CommandName Save-Resource -Times 1 -Exactly -ModuleName $dscModuleName -ParameterFilter {
+                $Workload -eq 'AzureAD' -and $Config -match "'AADFirst'" -and $Config -match "'AADLast'" -and $Config -notmatch "'TeamsTest'"
+            }
+        }
+
+        It 'Should reject metadata without supported resources before initializing output' {
+            Mock -CommandName Get-ResourceSchema -MockWith {
+                @{ MSFT_AADUnsupported = @{ FriendlyName = 'AADUnsupported'; Attributes = @(@{ Name = 'Id'; State = 'Key' }) } }
+            } -ModuleName $dscModuleName
+
+            { New-CompositeResourceModule -OutputPath 'C:\Temp' -Version $testVersion } | Should -Throw '*No supported resources*'
+            Should -Invoke -CommandName Initialize-Module -Times 0 -Exactly -ModuleName $dscModuleName
         }
     }
 }

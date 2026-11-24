@@ -2,19 +2,23 @@ function Get-AttributeString
 {
     <#
         .Synopsis
-        Adds all the provided properties to the configuration data object.
+        Adds complex properties to the example configuration data.
 
         .Description
-        This function loops through all the provided properties and adds them to the specified configuration data object.
+        Recursively expands normalized complex-type definitions into the example
+        configuration data, preserving scalar and array property shapes.
 
         .Example
-        Get-AttributeString -Property $property -ConfigData $currentDataObject
+        Get-AttributeString -Property $property -Schemas $schemas -ConfigData $currentDataObject
 
         .Parameter Property
-        The Property parameter is a property from the MOF schema that needs to be added to the configuration data object.
+        Specifies the normalized complex property to expand.
+
+        .Parameter Schemas
+        Specifies the lookup containing all resource and complex-type definitions.
 
         .Parameter ConfigData
-        The ConfigData parameter is the configuration data object that needs to be updated with the provided property.
+        Specifies the configuration data object to update.
     #>
     [CmdletBinding()]
     [OutputType([string])]
@@ -25,6 +29,10 @@ function Get-AttributeString
         $Property,
 
         [Parameter(Mandatory = $true)]
+        [System.Collections.Hashtable]
+        $Schemas,
+
+        [Parameter(Mandatory = $true)]
         [System.Object]
         $ConfigData
     )
@@ -32,7 +40,6 @@ function Get-AttributeString
     process
     {
         $script:currentDepth++
-
         if ($script:currentDepth -gt $script:maxDepth)
         {
             Write-Verbose 'MaxDepth reached!'
@@ -40,123 +47,70 @@ function Get-AttributeString
             return
         }
 
-        # Property is an EmbeddedInstance, so we have to use that in generating the properties.
-        $embeddedSchemas = $mofSchemas |
-            Where-Object -FilterScript {
-                    ($_.ClassName -eq $Property.EmbeddedInstance)
-            }
-
-        Write-Verbose "CurrentDepth: $($script:currentDepth)"
-
-        if ($Property.IsArray)
+        try
         {
-            $ConfigData.$($Property.Name) = @(@{})
-
-            if ($embeddedSchemas.Attributes.Name -notcontains "Id" -and `
-                $embeddedSchemas.Attributes.Name -notcontains "Identity" -and `
-                $embeddedSchemas.Attributes.Name -notcontains "SettingDefinitionId")
+            $embeddedSchema = $Schemas[$Property.EmbeddedInstance]
+            if ($null -eq $embeddedSchema)
             {
-                $ConfigData.$($property.Name)[0].UniqueId = ('{0} | {1} | {2}' -f "String", "Required", "[Unique ID to identify this specific object]")
+                throw "Complex type '$($Property.EmbeddedInstance)' for property '$($Property.Name)' is not defined."
             }
 
-            foreach ($embeddedProperty in $embeddedSchemas.Attributes)
+            $dataObject = @{}
+            if ($Property.IsArray)
             {
-                $description = $embeddedProperty.Description -replace "`r`n"
-                if ($null -eq $embeddedProperty.EmbeddedInstance)
+                $ConfigData[$Property.Name] = @($dataObject)
+                if ($embeddedSchema.Attributes.Name -notcontains 'Id' -and
+                    $embeddedSchema.Attributes.Name -notcontains 'Identity' -and
+                    $embeddedSchema.Attributes.Name -notcontains 'SettingDefinitionId')
                 {
-                    $state = 'Optional'
-                    if ($embeddedProperty.State -in @('Key', 'Required'))
-                    {
-                        $state = 'Required'
-                    }
+                    $dataObject.UniqueId = 'String | Required | [Unique ID to identify this specific object]'
+                }
+            }
+            else
+            {
+                $ConfigData[$Property.Name] = $dataObject
+            }
 
-                    if ($null -eq $embeddedProperty.ValueMap)
-                    {
-                        if ($embeddedProperty.DataType -like "*Array")
-                        {
-                            $dataType = $embeddedProperty.DataType -replace "Array"
-                            $result = @(('{0} | {1} | {2}' -f $dataType, $state, $description))
-                        }
-                        else
-                        {
-                            $result = ('{0} | {1} | {2}' -f $embeddedProperty.DataType, $state, $description)
-                        }
-                    }
-                    else
-                    {
-                        if ($embeddedProperty.DataType -like "*Array")
-                        {
-                            $dataType = $embeddedProperty.DataType -replace "Array"
-                            $result = @(('{0} | {1} | {2} | {3}' -f $dataType, $state, $description, ($embeddedProperty.ValueMap -join ' / ')))
-                        }
-                        else
-                        {
-                            $result = ('{0} | {1} | {2} | {3}' -f $embeddedProperty.DataType, $state, $description, ($embeddedProperty.ValueMap -join ' / '))
-                        }
-                    }
-                    $ConfigData.$($property.Name)[0].$($embeddedProperty.Name) = $result
+            foreach ($embeddedProperty in $embeddedSchema.Attributes)
+            {
+                if ($null -ne $embeddedProperty.EmbeddedInstance -and $embeddedProperty.EmbeddedInstance -ne 'MSFT_Credential')
+                {
+                    Get-AttributeString -Property $embeddedProperty -Schemas $Schemas -ConfigData $dataObject
+                    continue
+                }
+
+                $description = $embeddedProperty.Description -replace "`r`n"
+                $state = 'Optional'
+                if ($embeddedProperty.State -in @('Key', 'Required'))
+                {
+                    $state = 'Required'
+                }
+
+                $dataType = $embeddedProperty.DataType -replace 'Array$'
+                if ($embeddedProperty.EmbeddedInstance -eq 'MSFT_Credential')
+                {
+                    $dataType = 'PSCredential'
+                }
+
+                $result = '{0} | {1} | {2}' -f $dataType, $state, $description
+                if ($null -ne $embeddedProperty.ValueMap)
+                {
+                    $result += ' | {0}' -f ($embeddedProperty.ValueMap -join ' / ')
+                }
+
+                if ($embeddedProperty.IsArray)
+                {
+                    $dataObject[$embeddedProperty.Name] = @($result)
                 }
                 else
                 {
-                    if ($embeddedProperty.EmbeddedInstance -eq "MSFT_Credential")
-                    {
-                        $result = ('{0} | {1} | {2}' -f 'PSCredential', $state, $description)
-                        $ConfigData.$($property.Name)[0].$($embeddedProperty.Name) = $result
-                    }
-                    else
-                    {
-                        Get-AttributeString -Property $embeddedProperty -ConfigData ($ConfigData.$($Property.Name)[0])
-                    }
+                    $dataObject[$embeddedProperty.Name] = $result
                 }
             }
         }
-        else
+        finally
         {
-            $ConfigData.$($property.Name) = @{}
-
-            foreach ($embeddedProperty in $embeddedSchemas.Attributes)
-            {
-                $description = $embeddedProperty.Description -replace "`r`n"
-                if ($null -eq $embeddedProperty.EmbeddedInstance)
-                {
-                    $state = 'Optional'
-                    if ($embeddedProperty.State -in @('Key', 'Required'))
-                    {
-                        $state = 'Required'
-                    }
-
-                    if ($null -eq $embeddedProperty.ValueMap)
-                    {
-                        if ($embeddedProperty.DataType -like "*Array")
-                        {
-                            $dataType = $embeddedProperty.DataType -replace "Array"
-                            $result = @(('{0} | {1} | {2}' -f $dataType, $state, $description))
-                        }
-                        else
-                        {
-                            $result = ('{0} | {1} | {2}' -f $embeddedProperty.DataType, $state, $description)
-                        }
-                    }
-                    else
-                    {
-                        if ($embeddedProperty.DataType -like "*Array")
-                        {
-                            $dataType = $embeddedProperty.DataType -replace "Array"
-                            $result = @(('{0} | {1} | {2} | {3}' -f $dataType, $state, $description, ($embeddedProperty.ValueMap -join ' / ')))
-                        }
-                        else
-                        {
-                            $result = ('{0} | {1} | {2} | {3}' -f $embeddedProperty.DataType, $state, $description, ($embeddedProperty.ValueMap -join ' / '))
-                        }
-                    }
-                    $ConfigData.$($property.Name).$($embeddedProperty.Name) = $result
-                }
-                else
-                {
-                    Get-AttributeString -Property $embeddedProperty -ConfigData ($ConfigData.$($Property.Name))
-                }
-            }
+            $script:currentDepth--
         }
-        $script:currentDepth--
     }
 }

@@ -1,4 +1,5 @@
-﻿return @{
+# Normalized resource and complex-type fixtures.
+return @{
     MSFT_AAD = @(
         @{
             ClassName = 'MSFT_AADApplicationPermission'

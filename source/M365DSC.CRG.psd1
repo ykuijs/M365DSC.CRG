@@ -33,7 +33,7 @@ Copyright = '(c) 2023 Yorick Kuijs. All rights reserved.'
 Description = 'Microsoft365Dsc Composite Resource Generator'
 
 # Minimum version of the Windows PowerShell engine required by this module
-PowerShellVersion = '5.0'
+PowerShellVersion = '5.1'
 
 # Name of the Windows PowerShell host required by this module
 # PowerShellHostName = ''
